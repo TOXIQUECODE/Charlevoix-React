@@ -66,7 +66,7 @@ export default function HomeScreen({ onOuvrirApp }) {
                     <AppIcon icon="🚀" name="Projet X" onClick={() => onOuvrirApp('secret')} />
                 </div>
             </div>
-        
+
 
             <div
                 className="gta-widget"

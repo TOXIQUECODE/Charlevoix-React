@@ -50,18 +50,15 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1; /* Place le fond derrière tout le reste */
+  z-index: -1;
   background: conic-gradient(from 180deg at 50% 70%, hsla(0,0%,98%,1) 0deg, #eec32d 72deg, #ec4b4b 144deg, #709ab9 216deg, #4dffbf 288deg, hsla(0,0%,98%,1) 1turn);
-
-  /* Masque pour créer les points et le bruit de texture */
   mask:
-          radial-gradient(circle at 50% 50%, white 2px, transparent 2.5px) 50% 50% / var(--size) var(--size),
+          radial-gradient(circle at 50% 50%, white 2px, transparent 2.5px) 50% 50% / 20px 20px,
           url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
   mask-composite: intersect;
-
-  /* Animation du flicker */
+  -webkit-mask-composite: source-in; /* INDISPENSABLE POUR CHROME ET MOBILE */
   animation: flicker 20s infinite linear;
-  pointer-events: none; /* Empêche le fond de bloquer les clics sur les icônes */
+  pointer-events: none;
 }
 
 @keyframes flicker {
@@ -81,10 +78,9 @@
    FOND DU SITE & RACINE REACT
 ========================================= */
 body {
-  font-family: var(--font-stack);
-  background: url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2000') center/cover fixed;
+  background: #0a0a0a !important;
   margin: 0;
-  overflow: hidden;
+  padding: 0;
 }
 
 /* LA BOÎTE REACT (Prend tout l'écran) */
@@ -226,8 +222,11 @@ body {
    ACCUEIL & ICÔNES
 ========================================= */
 .gta-home-bg {
-  background: url('https://i.imgur.com/gGIkZUR.jpeg') center/cover no-repeat !important;
+  background: transparent !important; /* Tue le vieux fond bleu polygonal */
+  overflow-y: auto !important; /* Active le scroll pour voir la météo */
+  display: flex;
   flex-direction: column;
+  padding-bottom: 40px !important; /* Espace en bas pour respirer */
 }
 
 .app-grid {
