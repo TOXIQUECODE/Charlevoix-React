@@ -1,43 +1,10 @@
 /* =========================================
-   TYPOGRAPHIE PREMIUM & ANIMATIONS
+   TYPOGRAPHIE & RACINE
 ========================================= */
-/* Importation de la police "Inter" de Google (Style iOS/Apple pur) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
-@font-face {
-  font-family: 'NeonGlowItalic';
-  /* Si ton fichier est un .otf, change le .ttf ci-dessous en .otf */
-  src: url('/NeonGlowItalic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* L'animation ultra-réaliste du tube néon */
-@keyframes neon-flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
-    text-shadow:
-            0 0 5px #afffff,
-            0 0 10px #afffff,
-            0 0 20px #7db2b2,
-            0 0 40px #7db2b2,
-            0 0 80px #7db2b2,
-            0 0 100px #7db2b2;
-    opacity: 1;
-  }
-  20%, 24%, 55% {
-    text-shadow: none;
-    opacity: 0.4;
-  }
-}
-
 :root {
-  /* On remet Inter pour le reste de l'interface du téléphone */
-  --font-stack: "Inter", -apple-system, sans-serif;
+  --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, system-ui;
   --app-bg: #ffffff;
 }
 
@@ -48,17 +15,14 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* =========================================
-   FOND DU SITE & RACINE REACT
-========================================= */
 body {
   font-family: var(--font-stack);
-  background: url('https://images.unsplash.com/photo-1511497584788-876760111969?q=80&w=2000') center/cover fixed;
+  background: #000;
   margin: 0;
   overflow: hidden;
+  color-scheme: dark; /* Force le mode sombre pour les effets */
 }
 
-/* LA BOÎTE REACT (Prend tout l'écran) */
 #root {
   width: 100%;
   height: 100vh;
@@ -69,7 +33,116 @@ body {
 }
 
 /* =========================================
-   LA COQUE DU TÉLÉPHONE
+   EFFETS CODEPEN (ÉCRAN BIENVENUE)
+========================================= */
+.welcome-container {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #050505;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999999;
+  transition: opacity 0.5s ease-out;
+}
+
+.welcome-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 1. Le fond avec la grille futuriste (CodePen) */
+.codepen-grid-bg {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  --size: 45px;
+  --line: rgba(255, 255, 255, 0.1);
+  background:
+          linear-gradient(90deg, var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size),
+          linear-gradient(var(--line) 1px, transparent 1px var(--size)) 50% 50% / var(--size) var(--size);
+  mask: linear-gradient(-20deg, transparent 40%, white);
+  -webkit-mask: linear-gradient(-20deg, transparent 40%, white);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.welcome-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+/* 2. Le texte scintillant (CodePen) */
+.codepen-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.codepen-shimmer-text {
+  font-size: clamp(40px, 8vw, 85px); /* S'adapte à l'écran */
+  font-weight: 900;
+  margin: 0;
+  letter-spacing: 2px;
+  white-space: nowrap;
+
+  /* Configuration de l'Aurora/Flamme */
+  --offset: 3ch;
+  --angle: 100deg;
+  --aurora: linear-gradient(
+          var(--angle),
+          transparent calc(50% - var(--offset)),
+          #a960ee, #ff333d, #ffcb57, #90e0ff,
+          transparent calc(50% + var(--offset))
+  );
+  --place-color: rgba(255,255,255,0.2);
+
+  background:
+          var(--aurora) 0 0 / 300% 100% no-repeat border-box,
+          linear-gradient(var(--place-color), var(--place-color)) padding-box;
+
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: shimmer-effect 4s infinite both ease-in-out;
+}
+
+.welcome-subtitle {
+  color: #888;
+  font-size: 16px;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+@keyframes shimmer-effect {
+  0% { background-position: 100% 0; }
+  50%, 100% { background-position: 0% 0; }
+}
+
+.welcome-btn {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 16px 45px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(255,255,255,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  margin-top: 20px;
+}
+.welcome-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(255,255,255,0.3);
+}
+
+/* =========================================
+   LA COQUE DU TÉLÉPHONE iFRUIT
 ========================================= */
 .gta-phone {
   width: 100%;
@@ -86,10 +159,9 @@ body {
   overflow: hidden;
 }
 
-/* L'ÉCRAN NOIR EN DESSOUS DES APPS */
 .gta-screen {
   flex: 1;
-  min-height: 0; /* Empêche le débordement */
+  min-height: 0;
   position: relative;
   overflow: hidden;
   background: #000;
@@ -97,7 +169,6 @@ body {
   flex-direction: column;
 }
 
-/* LE BOUTON HOME */
 .home-btn-area {
   height: 70px;
   flex-shrink: 0;
@@ -111,153 +182,68 @@ body {
 }
 
 .home-btn {
-  width: 45px;
-  height: 45px;
+  width: 45px; height: 45px;
   border-radius: 50%;
   border: 2px solid #555;
   background: #1a1a1a;
   cursor: pointer;
   transition: 0.1s;
 }
-
 .home-btn:active { background: #333; }
 
 /* =========================================
-   LA BARRE D'ÉTAT (Heure, LTE)
+   BARRE D'ÉTAT & VUES
 ========================================= */
 .status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 20px;
-  font-size: 13px;
-  font-weight: bold;
-  color: white;
-  background: #000;
-  position: absolute;
-  top: 0; left: 0; width: 100%;
-  z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 20px; font-size: 13px; font-weight: bold; color: white;
+  background: #000; position: absolute; top: 0; left: 0; width: 100%; z-index: 100;
 }
 .status-left, .status-center, .status-right { flex: 1; }
 .status-center { text-align: center; display: flex; justify-content: center; gap: 5px; }
 .status-right { text-align: right; }
 .status-left { text-align: left; display: flex; align-items: center; }
 
-
-/* =========================================
-   VUES & CONTENUS
-========================================= */
-.vue {
-  display: none;
-  width: 100%;
-  height: 100%;
-  padding-top: 25px;
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
 
-.vue.active {
-  display: flex;
-  animation: zoomIn 0.2s ease-out;
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  flex-direction: column; /* Permet d'empiler le header et le contenu */
-}
+.vue { display: none; width: 100%; height: 100%; padding-top: 25px; }
+.vue.active { display: flex; animation: zoomIn 0.2s ease-out; flex: 1; min-height: 0; width: 100%; flex-direction: column; }
 
-/* L'en-tête des applications (Titre rouge) */
-.app-page {
-  background-color: var(--app-bg);
-}
-
+.app-page { background-color: var(--app-bg); }
 .app-header, .gta-contacts-header {
   background: linear-gradient(to bottom, #bd1c1c, #8b0000);
-  padding: 12px 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  flex-shrink: 0;
+  padding: 12px 15px; display: flex; justify-content: center; align-items: center;
+  z-index: 10; flex-shrink: 0;
 }
+.app-header h2, .gta-contacts-header h2 { font-size: 18px; color: white; margin: 0; }
 
-.app-header h2, .gta-contacts-header h2 {
-  font-size: 18px;
-  color: white;
-  margin: 0;
-}
-
-/* LE CONTENU QUI SCROLL */
-.app-content {
-  padding: 15px;
-  flex: 1;
-  overflow-y: auto; /* C'est ici que ça scroll ! */
-  min-height: 0;
-  color: #111;
-}
+.app-content { padding: 15px; flex: 1; overflow-y: auto; min-height: 0; color: #111; }
 
 /* =========================================
-   ACCUEIL & ICÔNES
+   ACCUEIL & WIDGETS
 ========================================= */
-.gta-home-bg {
-  background: url('https://i.imgur.com/gGIkZUR.jpeg') center/cover no-repeat !important;
-  flex-direction: column;
-}
-
-.app-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px 10px !important;
-  padding: 30px 20px 5px !important;
-}
-
-.app-icon-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-
-.app-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 28px;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.app-icon-wrapper:active .app-icon {
-  transform: scale(0.9);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
-}
-
-.app-name {
-  color: #000000;
-  font-size: 16px;
-  font-weight: bolder;
-  text-align: center;
-  font-family: math;
-}
+.gta-home-bg { background: url('https://i.imgur.com/gGIkZUR.jpeg') center/cover no-repeat !important; flex-direction: column; }
+.app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px 10px !important; padding: 30px 20px 5px !important; }
+.app-icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.app-icon { width: 60px; height: 60px; border-radius: 14px; display: flex; justify-content: center; align-items: center; font-size: 28px; box-shadow: 0 0 12px rgba(255, 255, 255, 0.4); transition: transform 0.2s, box-shadow 0.2s; }
+.app-icon-wrapper:active .app-icon { transform: scale(0.9); box-shadow: 0 0 20px rgba(255, 255, 255, 0.7); }
+.app-name { color: white; font-size: 11px; font-weight: 500; text-align: center; }
 
 .gta-widget {
-  margin: 8px 20px !important;
-  padding: 12px 15px !important;
+  margin: 8px 20px !important; padding: 12px 15px !important;
   background: rgba(143, 155, 166, 0.75) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 15px;
-  color: white;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 15px;
+  color: white; text-shadow: 0 1px 3px rgba(0,0,0,0.5);
 }
 
 /* =========================================
-   COMPOSANTS SPÉCIFIQUES (Contacts, Galerie, Recettes)
+   COMPOSANTS SPÉCIFIQUES
 ========================================= */
 .loading { color: #555; text-align: center; margin-top: 20px; font-size: 14px; }
-
-/* Contacts & Clavier */
 .gta-contact-item { display: flex; align-items: center; padding: 6px 10px; border-bottom: 1px solid #d4d4d4; background-color: #f2f2f2; height: 52px; }
 .gta-contact-icon { width: 40px; height: 40px; background: #666; display: flex; justify-content: center; align-items: center; margin-right: 12px; font-size: 22px; border-radius: 4px; }
 .gta-contact-name { color: #000; font-size: 18px; font-weight: 500; }
@@ -269,13 +255,11 @@ body {
 .dialpad-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; padding: 30px; flex: 1; background-color: #0c0c0c; align-content: start; }
 .dial-btn { background: #1a1a1a; border-radius: 12px; height: 65px; color: white; font-size: 26px; border: none; display: flex; justify-content: center; align-items: center; padding: 0 !important; cursor: pointer; }
 
-/* Recettes & ACM */
 .recipe-card, .acm-card { background: #fff; padding: 15px; margin-bottom: 15px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eaeaea; transition: all 0.3s ease; }
 .recipe-card:active, .acm-card:active { transform: scale(0.98); }
 .recipe-details, .acm-details { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 10px; border-left: 3px solid #0A84FF; box-shadow: inset 0 2px 5px rgba(0,0,0,0.02); }
 .acm-details { border-left-color: #e74c3c; }
 
-/* Réglages & Dev */
 .dev-card { border-bottom: 1px solid #ddd; background: #fff; }
 .dev-header { padding: 15px; font-weight: bold; display: flex; justify-content: space-between; cursor: pointer; }
 .dev-body { display: none; padding: 15px; background: #f9f9f9; }
@@ -283,7 +267,6 @@ body {
 .glass-input, .glass-textarea { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 8px; }
 .glass-btn-submit { width: 100%; padding: 12px; background: #0A84FF; border: none; border-radius: 8px; color: white; cursor: pointer; }
 
-/* Galerie & Slider */
 .slider-container { display: flex; align-items: center; justify-content: center; position: relative; width: 100%; max-height: 60vh; }
 .slider-img { max-height: 80vh !important; width: 100%; object-fit: contain; border-radius: 5px; }
 .slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; font-size: 24px; padding: 10px; border-radius: 50%; cursor: pointer;}
@@ -291,138 +274,17 @@ body {
 .slider-btn.next { right: 10px; }
 
 /* =========================================
-   MOBILE RESPONSIVE
-========================================= */
-/* =========================================
-   MOBILE RESPONSIVE (Plein écran absolu)
+   MOBILE RESPONSIVE (PLEIN ÉCRAN iOS/Android)
 ========================================= */
 @media screen and (max-width: 450px) {
-  body {
-    padding: 0;
-    background: #000; /* Fini le blanc ! Le fond devient noir absolu */
-  }
-  #root {
-    padding: 0;
-  }
+  body { padding: 0; background: #000; }
+  #root { padding: 0; }
   .gta-phone {
     width: 100%;
-    /* 100dvh = Dynamic Viewport Height (s'adapte à Safari parfaitement) */
     height: 100dvh;
     max-height: none;
-    border-radius: 0; /* On enlève les coins arrondis */
-    border: none; /* On enlève la bordure */
+    border-radius: 0;
+    border: none;
     box-shadow: none;
   }
-  /* On s'assure que l'écran de bienvenue prenne bien tout l'espace dynamique aussi */
-  .welcome-container {
-    height: 100dvh;
-  }
-}
-/* =========================================
-   ÉCRAN DE BIENVENUE
-========================================= */
-.welcome-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0; /* Tire le fond jusqu'à droite */
-  bottom: 0; /* Tire le fond jusqu'en bas, peu importe Safari ! */
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999999; /* On s'assure que ce soit par-dessus TOUT le reste */
-  transition: opacity 0.5s ease-out;
-}
-
-/* Classe ajoutée dynamiquement au moment du clic pour le fondu */
-.welcome-container.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.welcome-content {
-  text-align: center;
-  color: white;
-}
-
-.welcome-title {
-  font-family: 'NeonGlowItalic', sans-serif;
-  font-size: 62px;
-  color: #2f4f4f;
-  margin-bottom: 25px;
-  letter-spacing: 2px;
-  animation: neon-flicker 3s infinite alternate;
-}
-
-/* =========================================
-   LE TEXTE SOUS LE NÉON (EFFET CHALEUR DOUCE)
-========================================= */
-.welcome-text {
-  font-size: 18px;
-  margin-bottom: 45px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  display: inline-block;
-
-  /* VARIABLES DE LA CHALEUR : Zone plus large pour plus de douceur */
-  --offset: 6ch;
-  --angle: 110deg;
-  --base-color: #555555;
-
-  background:
-          linear-gradient(
-                  var(--angle),
-                  transparent calc(50% - var(--offset)),
-                  #ffb347 calc(50% - 2ch), /* Orange doux/pêche */
-                  #ff5722 50%,             /* Cœur chaleureux */
-                  #ffb347 calc(50% + 2ch), /* On remet du doux de l'autre côté */
-                  transparent calc(50% + var(--offset))
-          ) 0 0 / 300% 100% no-repeat border-box,
-          linear-gradient(var(--base-color), var(--base-color)) padding-box;
-
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-
-  /* L'ANIMATION : 4 secondes l'aller, 'alternate' gère le retour fluide ! */
-  animation: text-shimmer 14s infinite alternate ease-in-out;
-}
-
-/* Le moteur : de 100% à 0%, et 'alternate' s'occupe de faire 0% à 100% */
-@keyframes text-shimmer {
-  0% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: 0% 0;
-  }
-}
-
-/* Le moteur de l'animation qui fait balayer la flamme de droite à gauche */
-@keyframes text-shimmer {
-  0% {
-    background-position: 100% 0;
-  }
-  50%, 100% {
-    background-position: 0% 0;
-  }
-}
-
-.welcome-btn {
-  background: #fff;
-  color: #000;
-  border: none;
-  padding: 16px 45px;
-  font-size: 17px;
-  font-weight: 600;
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.welcome-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(255,255,255,0.4);
 }
