@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+// On importe Utensils pour l'icône du carré, et ChevronRight pour la flèche
+import { Utensils, ChevronRight } from 'lucide-react';
 
 export default function RecettesScreen() {
     const [recettes, setRecettes] = useState([]);
@@ -15,25 +17,35 @@ export default function RecettesScreen() {
     }, []);
 
     return (
-        <div className="vue active app-page">
-            <header className="app-header"><h2>🍳 iRecettes</h2></header>
+        <div className="vue active app-page" style={{ background: 'transparent' }}>
+
+            {/* Header en verre fumé */}
+            <header className="app-header" style={{ background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <h2 style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', color: 'white' }}>🍳 iRecettes</h2>
+            </header>
+
             <div className="app-content">
-                {chargement ? <div className="loading">Téléchargement... 🔄</div> : (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                        {recettes.map((rec, index) => (
-                            // Utilisation de details/summary pour l'effet accordéon !
-                            <details key={index} style={{ background: '#fff', padding: '15px', borderRadius: '14px', border: '1px solid #eaeaea', boxShadow: '0 4px 10px rgba(0,0,0,0.04)', cursor: 'pointer' }}>
-                                <summary style={{ fontWeight: 'bold', fontSize: '15px', display: 'flex', justifyContent: 'space-between', outline: 'none' }}>
-                                    {rec.nom} <span style={{ color: '#888', fontSize: '12px' }}>▼</span>
-                                </summary>
-                                <div style={{ background: '#f8f9fa', padding: '12px', borderRadius: '10px', marginTop: '10px', borderLeft: '3px solid #0066cc', fontSize: '14px', lineHeight: '1.4' }}>
-                                    <strong>🛒 Ingrédients :</strong>
-                                    <p style={{ marginBottom: '10px', whiteSpace: 'pre-wrap' }}>{rec.ingredients}</p>
-                                    <strong>👨‍🍳 Préparation :</strong>
-                                    <p style={{ whiteSpace: 'pre-wrap' }}>{rec.preparation}</p>
+                {chargement ? (
+                    <div className="loading" style={{ color: 'white' }}>Téléchargement... 🔄</div>
+                ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+
+                        {/* La structure EXACTE des autres applications */}
+                        {[1, 2, 3, 4].map((item, index) => (
+                            <div key={index} className="glass-list-card">
+                                <div className="glass-card-image-placeholder">
+                                    <Utensils size={24} color="rgba(255,255,255,0.3)" />
                                 </div>
-                            </details>
+                                <div className="glass-card-content">
+                                    <div className="ghost-line-title" style={{ width: index % 2 === 0 ? '70%' : '55%' }}></div>
+                                    <div className="ghost-line-subtitle" style={{ width: index % 2 === 0 ? '40%' : '60%' }}></div>
+                                </div>
+                                <div className="glass-card-arrow">
+                                    <ChevronRight size={20} color="#ffffff" />
+                                </div>
+                            </div>
                         ))}
+
                     </div>
                 )}
             </div>
