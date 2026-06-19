@@ -3,7 +3,7 @@
 ========================================= */
 /* Importation de la police "Inter" de Google (Style iOS/Apple pur) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
-@import url('https://pbtctfmxtuhdlgkhhjvz.supabase.co/storage/v1/object/public/Font/Neonblitz.ttf');
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap');
 
 @keyframes zoomIn {
   from { opacity: 0; transform: scale(0.95); }
@@ -314,10 +314,13 @@ body {
 
 .welcome-title {
   font-size: 52px;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: -1px;
   margin-bottom: 15px;
   animation: pulse 3s infinite;
+  font-family: "Bungee Shade", sans-serif;
+  font-style: normal;
+  }
 }
 
 .welcome-text {
