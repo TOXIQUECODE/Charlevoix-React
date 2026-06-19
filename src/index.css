@@ -320,39 +320,52 @@ body {
   }
 }
 /* =========================================
-   ÉCRAN DE BIENVENUE (Effet Néon Rose & Briques)
+   ÉCRAN DE BIENVENUE (Minimaliste / Clic Global)
 ========================================= */
 .welcome-container {
   position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  /* Le fond mur de briques assombri */
   background: #112 url('https://images.weserv.nl/?url=i.imgur.com/6QJjYMe.jpg') center no-repeat;
   background-size: cover;
   display: flex; justify-content: center; align-items: center;
-  z-index: 999999; transition: opacity 0.5s ease-out;
-}
-.welcome-container.hidden { opacity: 0; pointer-events: none; }
-.welcome-content { text-align: center; color: white; display: flex; flex-direction: column; align-items: center; }
+  z-index: 999999;
 
-/* LE TITRE NÉON ROSE */
+  /* Indique à l'utilisateur que TOUT l'écran est un bouton */
+  cursor: pointer;
+  /* L'effet de transition 3D (disparition et zoom) */
+  transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.welcome-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+  /* L'écran zoome vers l'utilisateur avant de disparaître */
+  transform: scale(1.5);
+}
+
+.welcome-content {
+  text-align: center;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* LE TITRE NÉON VIBUR SUR H1 */
 .welcome-title {
-  margin-bottom: 20px;
-  user-select: none;
-}
-
-.welcome-title b {
   font-family: "Vibur", cursive;
   font-weight: 400;
-  /* La taille s'adapte, mais ne dépasse jamais 80px */
   font-size: clamp(40px, 12vw, 80px);
   color: #fee;
+  margin-bottom: 10px;
+  user-select: none;
   text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #ff4444, 0 0 0.5em #ff4444, 0 0 0.1em #ff4444, 0 10px 3px #000;
 }
 
-/* L'animation des lettres spécifiques (les balises <span>) */
-.welcome-title b span {
+/* Le grésillement du néon sur les lettres spécifiques */
+.welcome-title span {
   animation: blink linear infinite 2s;
 }
-.welcome-title b span:nth-of-type(2) {
+.welcome-title span:nth-of-type(2) {
   animation: blink linear infinite 3s;
 }
 
@@ -367,17 +380,15 @@ body {
   92.5% { color: inherit; text-shadow: inherit; }
 }
 
-/* LE SOUS-TITRE (Simple et épuré pour laisser briller le néon) */
-/* LE SOUS-TITRE (Effet Chaleur en mouvement continu) */
+/* LE SOUS-TITRE (Effet chaleur fluide) */
 .welcome-text {
   font-family: "Inter", sans-serif;
-  font-size: 18px;
-  margin-bottom: 45px;
+  font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.5px;
   display: inline-block;
 
-  /* Variables de la flamme */
+  /* Variables de la chaleur */
   --offset: 6ch;
   --angle: 110deg;
   --base-color: #555555;
@@ -397,30 +408,11 @@ body {
   background-clip: text;
   -webkit-background-clip: text;
 
-  /* L'ajout de "linear" supprime le ralentissement/pause aux extrémités */
+  /* "linear" permet un balayage continu sans pause */
   animation: text-shimmer 3s infinite alternate linear;
 }
 
 @keyframes text-shimmer {
   0% { background-position: 100% 0; }
   100% { background-position: 0% 0; }
-}
-
-/* LE BOUTON DÉMARRER */
-.welcome-btn {
-  background: rgba(0, 0, 0, 0.6);
-  color: #fff;
-  border: 2px solid #ff4444;
-  padding: 14px 40px;
-  font-size: 16px;
-  font-weight: 600;
-  border-radius: 30px;
-  cursor: pointer;
-  box-shadow: 0 0 10px rgba(255, 68, 68, 0.4);
-  transition: all 0.3s ease;
-}
-.welcome-btn:hover {
-  background: #ff4444;
-  color: #fff;
-  box-shadow: 0 0 20px rgba(255, 68, 68, 0.8);
 }
