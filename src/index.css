@@ -3,6 +3,8 @@
 ========================================= */
 /* Importation de la police "Inter" de Google (Style iOS/Apple pur) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Vibur');
 
 @font-face {
   font-family: 'NeonGlowItalic';
@@ -319,110 +321,76 @@ body {
   }
 }
 /* =========================================
-   ÉCRAN DE BIENVENUE
+   ÉCRAN DE BIENVENUE (Effet Néon Rose & Briques)
 ========================================= */
 .welcome-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0; /* Tire le fond jusqu'à droite */
-  bottom: 0; /* Tire le fond jusqu'en bas, peu importe Safari ! */
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999999; /* On s'assure que ce soit par-dessus TOUT le reste */
-  transition: opacity 0.5s ease-out;
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  /* Le fond mur de briques assombri */
+  background: #112 url('https://images.weserv.nl/?url=i.imgur.com/6QJjYMe.jpg') center no-repeat;
+  background-size: cover;
+  display: flex; justify-content: center; align-items: center;
+  z-index: 999999; transition: opacity 0.5s ease-out;
 }
+.welcome-container.hidden { opacity: 0; pointer-events: none; }
+.welcome-content { text-align: center; color: white; display: flex; flex-direction: column; align-items: center; }
 
-/* Classe ajoutée dynamiquement au moment du clic pour le fondu */
-.welcome-container.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
-
-.welcome-content {
-  text-align: center;
-  color: white;
-}
-
+/* LE TITRE NÉON ROSE */
 .welcome-title {
-  font-family: 'NeonGlowItalic', sans-serif;
-  font-size: 62px;
-  color: #2f4f4f;
-  margin-bottom: 25px;
-  letter-spacing: 2px;
-  animation: neon-flicker 3s infinite alternate;
+  margin-bottom: 20px;
+  user-select: none;
 }
 
-/* =========================================
-   LE TEXTE SOUS LE NÉON (EFFET CHALEUR DOUCE)
-========================================= */
+.welcome-title b {
+  font: 400 12vh "Vibur", cursive; /* 12vh pour que ça rentre bien sur un écran de téléphone */
+  color: #fee;
+  text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #ff4444, 0 0 0.5em #ff4444, 0 0 0.1em #ff4444, 0 10px 3px #000;
+}
+
+/* L'animation des lettres spécifiques (les balises <span>) */
+.welcome-title b span {
+  animation: blink linear infinite 2s;
+}
+.welcome-title b span:nth-of-type(2) {
+  animation: blink linear infinite 3s;
+}
+
+@keyframes blink {
+  78% { color: inherit; text-shadow: inherit; }
+  79% { color: #333; }
+  80% { text-shadow: none; }
+  81% { color: inherit; text-shadow: inherit; }
+  82% { color: #333; text-shadow: none; }
+  83% { color: inherit; text-shadow: inherit; }
+  92% { color: #333; text-shadow: none; }
+  92.5% { color: inherit; text-shadow: inherit; }
+}
+
+/* LE SOUS-TITRE (Simple et épuré pour laisser briller le néon) */
 .welcome-text {
+  font-family: "Inter", sans-serif;
   font-size: 18px;
   margin-bottom: 45px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  display: inline-block;
-
-  /* VARIABLES DE LA CHALEUR : Zone plus large pour plus de douceur */
-  --offset: 6ch;
-  --angle: 110deg;
-  --base-color: #555555;
-
-  background:
-          linear-gradient(
-                  var(--angle),
-                  transparent calc(50% - var(--offset)),
-                  #ffb347 calc(50% - 2ch), /* Orange doux/pêche */
-                  #ff5722 50%,             /* Cœur chaleureux */
-                  #ffb347 calc(50% + 2ch), /* On remet du doux de l'autre côté */
-                  transparent calc(50% + var(--offset))
-          ) 0 0 / 300% 100% no-repeat border-box,
-          linear-gradient(var(--base-color), var(--base-color)) padding-box;
-
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-
-  /* L'ANIMATION : 4 secondes l'aller, 'alternate' gère le retour fluide ! */
-  animation: text-shimmer 14s infinite alternate ease-in-out;
+  color: #dddddd;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
 }
 
-/* Le moteur : de 100% à 0%, et 'alternate' s'occupe de faire 0% à 100% */
-@keyframes text-shimmer {
-  0% {
-    background-position: 100% 0;
-  }
-  100% {
-    background-position: 0% 0;
-  }
-}
-
-/* Le moteur de l'animation qui fait balayer la flamme de droite à gauche */
-@keyframes text-shimmer {
-  0% {
-    background-position: 100% 0;
-  }
-  50%, 100% {
-    background-position: 0% 0;
-  }
-}
-
+/* LE BOUTON DÉMARRER */
 .welcome-btn {
-  background: #fff;
-  color: #000;
-  border: none;
-  padding: 16px 45px;
-  font-size: 17px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  border: 2px solid #ff4444;
+  padding: 14px 40px;
+  font-size: 16px;
   font-weight: 600;
   border-radius: 30px;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 10px rgba(255, 68, 68, 0.4);
+  transition: all 0.3s ease;
 }
-
 .welcome-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(255,255,255,0.4);
+  background: #ff4444;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(255, 68, 68, 0.8);
 }
