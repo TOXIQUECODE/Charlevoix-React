@@ -71,7 +71,12 @@ export default function HomeScreen({ onOuvrirApp }) {
                 onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
                 style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
             >
-                <div style={{ fontSize: '32px' }}>🏕️</div>
+                <img
+                    src="/ton-image-chalet.png"
+                    alt="Chalet"
+                    className="widget-image"
+                />
+
                 <div>
                     <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
                     <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
