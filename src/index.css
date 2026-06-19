@@ -385,7 +385,7 @@ body {
   -webkit-background-clip: text; /* Pour Safari et iOS */
 
   /* On lance l'animation */
-  animation: text-shimmer 3s infinite both ease-in-out;
+  animation: text-shimmer 8s infinite both ease-in-out;
 }
 
 /* Le moteur de l'animation qui fait balayer la flamme de droite à gauche */
