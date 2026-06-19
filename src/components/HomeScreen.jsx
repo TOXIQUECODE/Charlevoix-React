@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import AppIcon from './AppIcon';
 import { supabase } from '../supabaseClient';
+import { TreePine, ShoppingBag, Map, Fish, Utensils, Camera, User, Settings, Rocket } from 'lucide-react';
+
+
+
 
 export default function HomeScreen({ onOuvrirApp }) {
     const [chaletInfo, setChaletInfo] = useState("Recherche signal GPS...");
@@ -55,15 +59,17 @@ export default function HomeScreen({ onOuvrirApp }) {
 
             <div className="vue active gta-home-bg">
                 <div className="app-grid">
-                    <AppIcon icon="🌲" name="Activités" onClick={() => onOuvrirApp('activites')} />
-                    <AppIcon icon="🛍️" name="Magasins" onClick={() => onOuvrirApp('magasins')} />
-                    <AppIcon icon="📍" name="Cartes" onClick={() => onOuvrirApp('cartes')} />
-                    <AppIcon icon="🎣" name="Pêche" onClick={() => onOuvrirApp('peche')} />
-                    <AppIcon icon="🍳" name="Recettes" onClick={() => onOuvrirApp('recettes')} />
-                    <AppIcon icon="📸" name="Galerie" onClick={() => onOuvrirApp('galerie')} />
-                    <AppIcon icon="👤" name="Contacts" onClick={() => onOuvrirApp('contacts')} />
-                    <AppIcon icon="⚙️" name="Réglages" onClick={() => onOuvrirApp('reglages')} />
-                    <AppIcon icon="🚀" name="Projet X" onClick={() => onOuvrirApp('secret')} />
+                    {/* On remplace l'icône texte par le composant SVG avec la couleur voulue */}
+                    <AppIcon icon={<TreePine size={34} color="#2ecc71" />} name="Activités" onClick={() => onOuvrirApp('activites')} />
+                    <AppIcon icon={<ShoppingBag size={34} color="#f39c12" />} name="Magasins" onClick={() => onOuvrirApp('magasins')} />
+                    <AppIcon icon={<Map size={34} color="#e74c3c" />} name="Cartes" onClick={() => onOuvrirApp('cartes')} />
+                    <AppIcon icon={<Fish size={34} color="#3498db" />} name="Pêche" onClick={() => onOuvrirApp('peche')} />
+                    <AppIcon icon={<Utensils size={34} color="#d35400" />} name="Recettes" onClick={() => onOuvrirApp('recettes')} />
+                    <AppIcon icon={<Camera size={34} color="#9b59b6" />} name="Galerie" onClick={() => onOuvrirApp('galerie')} />
+                    <AppIcon icon={<User size={34} color="#34495e" />} name="Contacts" onClick={() => onOuvrirApp('contacts')} />
+                    <AppIcon icon={<Settings size={34} color="#7f8c8d" />} name="Réglages" onClick={() => onOuvrirApp('reglages')} />
+
+                    <AppIcon icon={<Rocket size={34} color="#ff4757" />} name="WIP" onClick={() => onOuvrirApp('secret')} />
                 </div>
             </div>
 
