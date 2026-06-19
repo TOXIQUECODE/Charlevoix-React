@@ -80,7 +80,7 @@ export default function HomeScreen({ onOuvrirApp }) {
             <div
                 className="gta-widget"
                 /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA MÉTÉO */
-                onClick={() => window.open('https://www.meteomedia.com/fr/meteo/quebec/les-eboulements', '_blank')}
+                onClick={() => window.open('https://www.meteomedia.com/fr/ville/ca/quebec/baie-saint-paul/7-jours', '_blank')}
                 style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '-15px', cursor: 'pointer' }}
             >
                 <div style={{ fontSize: '32px' }}>⛅</div>
