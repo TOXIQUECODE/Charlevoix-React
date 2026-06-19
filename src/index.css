@@ -5,10 +5,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 
 @font-face {
-  font-family: 'NeonGlowBold';
+  font-family: 'NeonGlowItalic';
   /* Si ton fichier est un .otf, change le .ttf ci-dessous en .otf */
   src: url('/NeonGlowItalic.ttf') format('truetype');
-  font-weight: bold;
+  font-weight: normal;
   font-style: normal;
 }
 
