@@ -355,37 +355,48 @@ body {
   animation: neon-flicker 3s infinite alternate;
 }
 
+/* =========================================
+   LE TEXTE SOUS LE NÉON (EFFET CHALEUR DOUCE)
+========================================= */
 .welcome-text {
-  font-size: 18px; /* Un poil plus grand pour bien voir la flamme */
+  font-size: 18px;
   margin-bottom: 45px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  display: inline-block; /* Requis pour l'animation du fond */
+  display: inline-block;
 
-  /* LES VARIABLES DE LA FLAMME */
-  --offset: 3ch;
-  --angle: 100deg;
-  --base-color: #555555; /* Le gris du texte quand la flamme n'est pas là */
+  /* VARIABLES DE LA CHALEUR : Zone plus large pour plus de douceur */
+  --offset: 6ch;
+  --angle: 110deg;
+  --base-color: #555555;
 
   background:
-    /* 1. La flamme (Orange/Rouge) qui va se déplacer */
           linear-gradient(
                   var(--angle),
                   transparent calc(50% - var(--offset)),
-                  hsl(45 100% 60%) calc(50% - (var(--offset) - 0.5ch)),
-                  hsl(0 100% 50%),
+                  #ffb347 calc(50% - 2ch), /* Orange doux/pêche */
+                  #ff5722 50%,             /* Cœur chaleureux */
+                  #ffb347 calc(50% + 2ch), /* On remet du doux de l'autre côté */
                   transparent calc(50% + var(--offset))
           ) 0 0 / 300% 100% no-repeat border-box,
-            /* 2. La couleur de base fixe en dessous */
           linear-gradient(var(--base-color), var(--base-color)) padding-box;
 
-  /* On découpe le fond en forme de texte */
   color: transparent;
   background-clip: text;
-  -webkit-background-clip: text; /* Pour Safari et iOS */
+  -webkit-background-clip: text;
 
-  /* On lance l'animation */
-  animation: text-shimmer 8s infinite both ease-in-out;
+  /* L'ANIMATION : 4 secondes l'aller, 'alternate' gère le retour fluide ! */
+  animation: text-shimmer 4s infinite alternate ease-in-out;
+}
+
+/* Le moteur : de 100% à 0%, et 'alternate' s'occupe de faire 0% à 100% */
+@keyframes text-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: 0% 0;
+  }
 }
 
 /* Le moteur de l'animation qui fait balayer la flamme de droite à gauche */
