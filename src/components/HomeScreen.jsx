@@ -62,7 +62,12 @@ export default function HomeScreen({ onOuvrirApp }) {
                 <AppIcon color="linear-gradient(135deg, #34495e, #2c3e50)" icon="⚙️" name="Réglages" onClick={() => onOuvrirApp('reglages')} />
             </div>
 
-            <div className="gta-widget" style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}>
+            <div
+                className="gta-widget"
+                /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA CARTE */
+                onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Les+Eboulements,QC', '_blank')}
+                style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
+            >
                 <div style={{ fontSize: '32px' }}>🏕️</div>
                 <div>
                     <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
@@ -72,7 +77,12 @@ export default function HomeScreen({ onOuvrirApp }) {
                 </div>
             </div>
 
-            <div className="gta-widget" style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '-15px', cursor: 'pointer' }}>
+            <div
+                className="gta-widget"
+                /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA MÉTÉO */
+                onClick={() => window.open('https://www.meteomedia.com/fr/meteo/quebec/les-eboulements', '_blank')}
+                style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '-15px', cursor: 'pointer' }}
+            >
                 <div style={{ fontSize: '32px' }}>⛅</div>
                 <div>
                     <div><strong>Météo Charlevoix ↗</strong></div>
