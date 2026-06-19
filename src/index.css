@@ -368,14 +368,42 @@ body {
 }
 
 /* LE SOUS-TITRE (Simple et épuré pour laisser briller le néon) */
+/* LE SOUS-TITRE (Effet Chaleur en mouvement continu) */
 .welcome-text {
   font-family: "Inter", sans-serif;
   font-size: 18px;
   margin-bottom: 45px;
   font-weight: 500;
   letter-spacing: 0.5px;
-  color: #dddddd;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+  display: inline-block;
+
+  /* Variables de la flamme */
+  --offset: 6ch;
+  --angle: 110deg;
+  --base-color: #555555;
+
+  background:
+          linear-gradient(
+                  var(--angle),
+                  transparent calc(50% - var(--offset)),
+                  #ffb347 calc(50% - 2ch),
+                  #ff5722 50%,
+                  #ffb347 calc(50% + 2ch),
+                  transparent calc(50% + var(--offset))
+          ) 0 0 / 300% 100% no-repeat border-box,
+          linear-gradient(var(--base-color), var(--base-color)) padding-box;
+
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+
+  /* L'ajout de "linear" supprime le ralentissement/pause aux extrémités */
+  animation: text-shimmer 3s infinite alternate linear;
+}
+
+@keyframes text-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: 0% 0; }
 }
 
 /* LE BOUTON DÉMARRER */
