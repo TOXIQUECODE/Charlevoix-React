@@ -293,14 +293,29 @@ body {
 /* =========================================
    MOBILE RESPONSIVE
 ========================================= */
+/* =========================================
+   MOBILE RESPONSIVE (Plein écran absolu)
+========================================= */
 @media screen and (max-width: 450px) {
-  body { padding: 0; }
-  #root { padding: 15px; }
+  body {
+    padding: 0;
+    background: #000; /* Fini le blanc ! Le fond devient noir absolu */
+  }
+  #root {
+    padding: 0;
+  }
   .gta-phone {
-    height: calc(100vh - 30px);
-    max-height: 850px;
-    border-radius: 35px;
-    border: 6px solid #111;
+    width: 100%;
+    /* 100dvh = Dynamic Viewport Height (s'adapte à Safari parfaitement) */
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0; /* On enlève les coins arrondis */
+    border: none; /* On enlève la bordure */
+    box-shadow: none;
+  }
+  /* On s'assure que l'écran de bienvenue prenne bien tout l'espace dynamique aussi */
+  .welcome-container {
+    height: 100dvh;
   }
 }
 /* =========================================
