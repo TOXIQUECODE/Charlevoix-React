@@ -240,7 +240,7 @@ body {
   /* ON AJOUTE LA NOUVELLE POLICE ICI */
   font-family: 'DroplineRegular', sans-serif;
   font-size: 16px; /* J'ai légèrement augmenté la taille car les polices custom s'affichent souvent plus petites */
-  font-weight: normal;
+  font-weight: bold;
   text-align: center;
   letter-spacing: 0.5px; /* Un petit espacement pour la lisibilité */
   text-shadow: 0 1px 3px rgba(0,0,0,0.8); /* Une petite ombre pour qu'on lise bien sur le fond */
