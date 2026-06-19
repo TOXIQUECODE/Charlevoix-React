@@ -76,8 +76,8 @@ export default function HomeScreen({ onOuvrirApp }) {
                     alt="Chalet"
                     className="widget-image"
                     style={{
-                        width: '60px',
-                        height: '60px',
+                        width: '80px',
+                        height: '80px',
                         objectFit: 'cover',
                         borderRadius: '8px'
                     }}
