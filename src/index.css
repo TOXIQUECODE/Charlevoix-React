@@ -219,20 +219,40 @@ body {
 }
 
 .app-icon {
-  width: 60px;
-  height: 60px;
-  border-radius: 14px;
+  position: relative; /* Indispensable pour superposer le net et le flou */
+  width: 70px;
+  height: 70px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.85); /* Blanc vitré */
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 28px;
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .app-icon-wrapper:active .app-icon {
-  transform: scale(0.9);
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+  transform: scale(0.92);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* L'émoji net au premier plan */
+.app-icon-text {
+  font-size: 32px;
+  position: relative;
+  z-index: 2;
+}
+
+/* L'émoji flou en arrière-plan qui fait la lumière colorée */
+.app-icon-blur {
+  font-size: 45px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  filter: blur(10px);
+  opacity: 0.6;
+  z-index: 1;
 }
 
 .app-name {

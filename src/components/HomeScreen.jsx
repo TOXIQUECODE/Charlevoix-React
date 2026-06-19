@@ -52,14 +52,17 @@ export default function HomeScreen({ onOuvrirApp }) {
     return (
         <div className="vue active gta-home-bg">
             <div className="app-grid">
-                <AppIcon color="linear-gradient(135deg, #2ecc71, #27ae60)" icon="🌲" name="Activités" onClick={() => onOuvrirApp('activites')} />
-                <AppIcon color="linear-gradient(135deg, #f39c12, #d35400)" icon="🛍️" name="Magasins" onClick={() => onOuvrirApp('magasins')} />
-                <AppIcon color="linear-gradient(135deg, #3498db, #2980b9)" icon="📍" name="Cartes" onClick={() => onOuvrirApp('cartes')} />
-                <AppIcon color="linear-gradient(135deg, #1abc9c, #16a085)" icon="🎣" name="Pêche" onClick={() => onOuvrirApp('peche')} />
-                <AppIcon color="linear-gradient(135deg, #d35400, #c0392b)" icon="🍳" name="Recettes" onClick={() => onOuvrirApp('recettes')} />
-                <AppIcon color="linear-gradient(135deg, #9b59b6, #8e44ad)" icon="📸" name="Galerie" onClick={() => onOuvrirApp('galerie')} />
-                <AppIcon color="linear-gradient(135deg, #c0392b, #8e0000)" icon="👤" name="Contacts" onClick={() => onOuvrirApp('contacts')} />
-                <AppIcon color="linear-gradient(135deg, #34495e, #2c3e50)" icon="⚙️" name="Réglages" onClick={() => onOuvrirApp('reglages')} />
+                <AppIcon icon="🌲" name="Activités" onClick={() => onOuvrirApp('activites')} />
+                <AppIcon icon="🛍️" name="Magasins" onClick={() => onOuvrirApp('magasins')} />
+                <AppIcon icon="📍" name="Cartes" onClick={() => onOuvrirApp('cartes')} />
+                <AppIcon icon="🎣" name="Pêche" onClick={() => onOuvrirApp('peche')} />
+                <AppIcon icon="🍳" name="Recettes" onClick={() => onOuvrirApp('recettes')} />
+                <AppIcon icon="📸" name="Galerie" onClick={() => onOuvrirApp('galerie')} />
+                <AppIcon icon="👤" name="Contacts" onClick={() => onOuvrirApp('contacts')} />
+                <AppIcon icon="⚙️" name="Réglages" onClick={() => onOuvrirApp('reglages')} />
+
+                {/* Ajout de la fusée pour ton futur projet */}
+                <AppIcon icon="🚀" name="Projet X" onClick={() => onOuvrirApp('secret')} />
             </div>
 
             <div
