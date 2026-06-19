@@ -170,7 +170,7 @@ export default function HomeScreen({ onOuvrirApp }) {
                         <div className="app-grid">
                             <AppIcon icon={<Camera size={34} color="#9b59b6" />} name="Galerie" onClick={() => onOuvrirApp('galerie')} />
                             <AppIcon icon={<Settings size={34} color="#7f8c8d" />} name="Réglages" onClick={() => onOuvrirApp('reglages')} />
-                            <AppIcon icon={<Rocket size={34} color="#ff4757" />} name="Projet X" onClick={() => onOuvrirApp('secret')} />
+                            <AppIcon icon={<Rocket size={34} color="#ff4757" />} name="" onClick={() => onOuvrirApp('secret')} />
                         </div>
                     </div>
 
