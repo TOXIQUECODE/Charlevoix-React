@@ -298,26 +298,25 @@ body {
 /* =========================================
    MOBILE RESPONSIVE (Plein écran absolu)
 ========================================= */
+/* =========================================
+   MOBILE RESPONSIVE (Avec coque visible)
+========================================= */
 @media screen and (max-width: 450px) {
-  body {
-    padding: 0;
-    background: #000; /* Fini le blanc ! Le fond devient noir absolu */
-  }
-  #root {
-    padding: 0;
-  }
+  body { padding: 0; background: #000; }
+  #root { padding: 0; }
   .gta-phone {
-    width: 100%;
-    /* 100dvh = Dynamic Viewport Height (s'adapte à Safari parfaitement) */
-    height: 100dvh;
+    /* 15px de chaque côté = 30px à retirer de la largeur totale */
+    width: calc(100% - 30px);
+    /* 15px en haut + 25px en bas = 40px à retirer de la hauteur totale */
+    height: calc(100dvh - 40px);
+    /* Marges : Haut(15px) Droite(15px) Bas(25px) Gauche(15px) */
+    margin: 15px 15px 25px 15px;
     max-height: none;
-    border-radius: 0; /* On enlève les coins arrondis */
-    border: none; /* On enlève la bordure */
-    box-shadow: none;
-  }
-  /* On s'assure que l'écran de bienvenue prenne bien tout l'espace dynamique aussi */
-  .welcome-container {
-    height: 100dvh;
+
+    /* On réactive le design de la coque */
+    border-radius: 35px;
+    border: 6px solid #111;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
   }
 }
 /* =========================================
@@ -341,7 +340,10 @@ body {
 }
 
 .welcome-title b {
-  font: 400 12vh "Vibur", cursive; /* 12vh pour que ça rentre bien sur un écran de téléphone */
+  font-family: "Vibur", cursive;
+  font-weight: 400;
+  /* La taille s'adapte, mais ne dépasse jamais 80px */
+  font-size: clamp(40px, 12vw, 80px);
   color: #fee;
   text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #ff4444, 0 0 0.5em #ff4444, 0 0 0.1em #ff4444, 0 10px 3px #000;
 }
