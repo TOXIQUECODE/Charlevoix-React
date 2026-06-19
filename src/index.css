@@ -21,8 +21,8 @@
 @keyframes neon-flicker {
   0%, 18%, 22%, 25%, 53%, 57%, 100% {
     text-shadow:
-            0 0 5px #fff,
-            0 0 10px #fff,
+            0 0 5px #afffff,
+            0 0 10px #afffff,
             0 0 20px #7db2b2,
             0 0 40px #7db2b2,
             0 0 80px #7db2b2,
