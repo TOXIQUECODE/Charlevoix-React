@@ -233,10 +233,11 @@ body {
 }
 
 .app-name {
-  color: white;
-  font-size: 11px;
-  font-weight: 500;
+  color: #000000;
+  font-size: 16px;
+  font-weight: bolder;
   text-align: center;
+  font-family: math;
 }
 
 .gta-widget {
@@ -309,13 +310,13 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0; /* Tire le fond jusqu'à droite */
+  bottom: 0; /* Tire le fond jusqu'en bas, peu importe Safari ! */
   background: #000;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000;
+  z-index: 999999; /* On s'assure que ce soit par-dessus TOUT le reste */
   transition: opacity 0.5s ease-out;
 }
 
