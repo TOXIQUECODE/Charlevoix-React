@@ -9,27 +9,19 @@ import RecettesScreen from './components/RecettesScreen';
 import GalerieScreen from './components/GalerieScreen';
 import ContactsScreen from './components/ContactsScreen';
 import ReglagesScreen from './components/ReglagesScreen';
-import NipScreen from './components/NipScreen'; // <-- Le nouveau videur
+import NipScreen from './components/NipScreen';
+import WelcomeScreen from './components/WelcomeScreen'; // <-- 1. ON L'IMPORTE ICI
 
 export default function App() {
     const [pageActive, setPageActive] = useState('accueil');
-    const [accesDebloque, setAccesDebloque] = useState(false); // Le cadenas
+    const [accesDebloque, setAccesDebloque] = useState(false);
 
-    // Les apps sensibles
     const vuesProtegees = ['contacts', 'galerie', 'reglages'];
 
-    // Fonction pour gérer la navigation sécurisée
     const gererNavigation = () => {
         if (vuesProtegees.includes(pageActive) && !accesDebloque) {
-            return (
-                <NipScreen
-                    onUnlock={() => setAccesDebloque(true)}
-                    onCancel={() => setPageActive('accueil')}
-                />
-            );
+            return <NipScreen onUnlock={() => setAccesDebloque(true)} onCancel={() => setPageActive('accueil')} />;
         }
-
-        // Sinon, on affiche les pages normalement
         return (
             <>
                 {pageActive === 'accueil' && <HomeScreen onOuvrirApp={setPageActive} />}
@@ -46,14 +38,19 @@ export default function App() {
     };
 
     return (
-        <div className="gta-phone" id="ifruit-app">
-            <div className="gta-screen">
-                <StatusBar />
-                {gererNavigation()}
+        <>
+            {/* 2. ON LE PLACE ICI, HORS DU TÉLÉPHONE POUR QU'IL PRENNE TOUT L'ÉCRAN */}
+            <WelcomeScreen />
+
+            <div className="gta-phone" id="ifruit-app">
+                <div className="gta-screen">
+                    <StatusBar />
+                    {gererNavigation()}
+                </div>
+                <div className="home-btn-area">
+                    <div className="home-btn" onClick={() => setPageActive('accueil')}></div>
+                </div>
             </div>
-            <div className="home-btn-area">
-                <div className="home-btn" onClick={() => setPageActive('accueil')}></div>
-            </div>
-        </div>
+        </>
     );
 }
