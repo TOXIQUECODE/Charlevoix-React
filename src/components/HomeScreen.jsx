@@ -162,9 +162,6 @@ export default function HomeScreen({ onOuvrirApp }) {
                         </div>
                     </div>
                 </div>
-
-                <WidgetMeteo onClick={() => onOuvrirApp('meteo')} />
-
             </div>
         </div>
     );
