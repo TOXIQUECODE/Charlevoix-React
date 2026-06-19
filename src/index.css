@@ -468,3 +468,11 @@ body {
   0% { background-position: 100% 0; }
   100% { background-position: 0% 0; }
 }
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* Force le conteneur à prendre tout l'espace restant */
+  height: 100%;
+  width: 100%;
+}
