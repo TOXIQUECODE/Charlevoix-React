@@ -6,14 +6,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Vibur');
 
-@font-face {
-  font-family: 'NeonGlowItalic';
-  /* Si ton fichier est un .otf, change le .ttf ci-dessous en .otf */
-  src: url('/NeonGlowItalic.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
-
 @keyframes zoomIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
@@ -351,14 +343,23 @@ body {
 }
 
 /* LE TITRE NÉON VIBUR SUR H1 */
+/* LE TITRE NÉON (Couleur Flamme/Orange) */
 .welcome-title {
-  font-family: "Vibur", cursive;
+  font-family: "Vibur", cursive !important;
   font-weight: 400;
-  font-size: clamp(40px, 12vw, 80px);
-  color: #fee;
+  font-size: clamp(50px, 15vw, 90px);
+  color: #fff2e6; /* Un blanc très légèrement orangé pour le tube de verre */
   margin-bottom: 10px;
   user-select: none;
-  text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #ff4444, 0 0 0.5em #ff4444, 0 0 0.1em #ff4444, 0 10px 3px #000;
+
+  /* Les ombres portées qui créent la lumière de feu */
+  text-shadow:
+          0 -40px 100px,
+          0 0 2px,
+          0 0 1em #ff5722,   /* Le cœur rouge/orange ardent de la flamme */
+          0 0 0.5em #ff5722, /* Le halo intense */
+          0 0 0.1em #ffb347, /* La bordure pêche plus douce */
+          0 10px 3px #000;   /* L'ombre sous le tube */
 }
 
 /* Le grésillement du néon sur les lettres spécifiques */
