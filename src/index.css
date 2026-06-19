@@ -275,7 +275,7 @@ body {
 }
 
 .app-name {
-  color: rgb(0 0 0 / 0.62);
+  color: rgb(255 255 255);
   /* ON AJOUTE LA NOUVELLE POLICE ICI */
   font-family: 'DroplineRegular', sans-serif;
   font-size: 18px; /* J'ai légèrement augmenté la taille car les polices custom s'affichent souvent plus petites */
