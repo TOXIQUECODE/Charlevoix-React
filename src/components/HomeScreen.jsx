@@ -72,7 +72,7 @@ export default function HomeScreen({ onOuvrirApp }) {
                 style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
             >
                 <img
-                    src="/ton-image-chalet.png"
+                    src="/chalet.png"
                     alt="Chalet"
                     className="widget-image"
                 />
