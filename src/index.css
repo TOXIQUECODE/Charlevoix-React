@@ -7,7 +7,7 @@
 @font-face {
   font-family: 'NeonGlowBold';
   /* Si ton fichier est un .otf, change le .ttf ci-dessous en .otf */
-  src: url('/NeonGlowBold.ttf') format('truetype');
+  src: url('/NeonGlowItalic.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
@@ -331,7 +331,7 @@ body {
 }
 
 .welcome-title {
-  font-family: 'NeonGlowBold', sans-serif;
+  font-family: 'NeonGlowItalic', sans-serif;
   font-size: 85px;
   color: #fff;
   margin-bottom: 25px;
