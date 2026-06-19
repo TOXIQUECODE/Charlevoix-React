@@ -243,10 +243,10 @@ body {
 
 /* Le flou derrière qui crée la lueur colorée */
 .app-icon-blur {
-  font-size: 75px; /* Plus gros pour un halo plus large */
+  font-size: 55px; /* Plus gros pour un halo plus large */
   position: absolute;
-  filter: blur(10px); /* Plus flou */
-  opacity: 0.8;       /* Plus intense */
+  filter: blur(20px); /* Plus flou */
+  opacity: 1.0;       /* Plus intense */
   z-index: 0;
   pointer-events: none;
 }
