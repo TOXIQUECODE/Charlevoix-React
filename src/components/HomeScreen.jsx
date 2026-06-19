@@ -50,6 +50,9 @@ export default function HomeScreen({ onOuvrirApp }) {
     }, []);
 
     return (
+      <div className="main-wrapper">
+        <div className="grid-background">
+
         <div className="vue active gta-home-bg">
             <div className="app-grid">
                 <AppIcon icon="🌲" name="Activités" onClick={() => onOuvrirApp('activites')} />

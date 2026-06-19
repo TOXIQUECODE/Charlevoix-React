@@ -44,6 +44,32 @@
   --app-bg: #ffffff;
 }
 
+.grid-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1; /* Place le fond derrière tout le reste */
+  background: conic-gradient(from 180deg at 50% 70%, hsla(0,0%,98%,1) 0deg, #eec32d 72deg, #ec4b4b 144deg, #709ab9 216deg, #4dffbf 288deg, hsla(0,0%,98%,1) 1turn);
+
+  /* Masque pour créer les points et le bruit de texture */
+  mask:
+          radial-gradient(circle at 50% 50%, white 2px, transparent 2.5px) 50% 50% / var(--size) var(--size),
+          url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
+  mask-composite: intersect;
+
+  /* Animation du flicker */
+  animation: flicker 20s infinite linear;
+  pointer-events: none; /* Empêche le fond de bloquer les clics sur les icônes */
+}
+
+@keyframes flicker {
+  to {
+    mask-position: 50% 50%, 0 50%;
+  }
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
