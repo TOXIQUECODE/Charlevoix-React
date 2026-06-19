@@ -1,95 +1,53 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+// 1. On ajoute les icônes de Lucide pour le design
+import { Image as ImageIcon, ChevronRight } from 'lucide-react';
 
-export default function ContactsScreen() {
-    const [contacts, setContacts] = useState([]);
+export default function CartesScreen() {
+    const [lieux, setLieux] = useState([]);
     const [chargement, setChargement] = useState(true);
 
-    // États pour le clavier téléphonique
-    const [showDialpad, setShowDialpad] = useState(false);
-    const [numero, setNumero] = useState("");
-
     useEffect(() => {
-        async function chercherContacts() {
-            const { data } = await supabase.from('contacts').select('*');
-            if (data) setContacts(data);
+        async function chercherLieux() {
+            const { data } = await supabase.from('localisation').select('*');
+            if (data) setLieux(data);
             setChargement(false);
         }
-        chercherContacts();
+        chercherLieux();
     }, []);
 
-    // Génère la bonne URL pour la photo de profil
-    const getImageUrl = (url) => {
-        if (!url) return '';
-        if (url.startsWith('http')) return url;
-        const { data } = supabase.storage.from('contacts').getPublicUrl(url);
-        return data.publicUrl;
-    };
-
-    // Logique du clavier
-    const ajouterChiffre = (c) => { if (numero.length < 10) setNumero(numero + c); };
-    const effacerChiffre = () => setNumero(numero.slice(0, -1));
-    const appeler = () => { if (numero) window.location.href = `tel:${numero}`; };
-
-    // Formate les numéros avec des tirets
-    const formatNumero = (num) => {
-        let match = num.match(/^(\d{0,3})(\d{0,3})(\d{0,4})$/);
-        if (!match) return num;
-        return !match[2] ? match[1] : `${match[1]}-${match[2]}${match[3] ? '-' + match[3] : ''}`;
-    };
-
     return (
-        <div className="vue active app-page" style={{ backgroundColor: showDialpad ? '#000' : '#f2f2f2' }}>
+        <div className="vue active app-page" style={{ background: 'transparent' }}>
+            {/* Header en verre fumé comme pour les Activités */}
+            <header className="app-header" style={{ background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <h2 style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', color: 'white' }}>📍 Cartes GPS</h2>
+            </header>
 
-            {!showDialpad ? (
-                // VUE 1 : LE RÉPERTOIRE
-                <>
-                    <header className="app-header" style={{ background: 'linear-gradient(to bottom, #bd1c1c, #8b0000)' }}><h2>👤 Contacts</h2></header>
-                    <div className="app-content" style={{ padding: 0 }}>
-                        {chargement ? <div className="loading" style={{ padding: '15px' }}>Chargement...</div> : (
-                            <div>
-                                {contacts.map((c, i) => (
-                                    <a key={i} href={`tel:${c.telephone}`} style={{ textDecoration: 'none' }}>
-                                        <div className="gta-contact-item">
-                                            <div className="gta-contact-icon" style={{ background: c.photo_url ? `url('${getImageUrl(c.photo_url)}') center/cover` : '#666' }}>
-                                                {!c.photo_url && '👤'}
-                                            </div>
-                                            <div className="gta-contact-name">{c.nom}</div>
-                                        </div>
-                                    </a>
-                                ))}
+            <div className="app-content">
+                {chargement ? (
+                    <div className="loading" style={{ color: 'white' }}>Signal satellite... 🛰️</div>
+                ) : (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+
+                        {/* 2. On affiche le Squelette Visuel (4 fausses cartes) au lieu des vraies données */}
+                        {[1, 2, 3, 4].map((item, index) => (
+                            <div key={index} className="glass-list-card">
+                                <div className="glass-card-image-placeholder">
+                                    <ImageIcon size={24} color="rgba(255,255,255,0.3)" />
+                                </div>
+                                <div className="glass-card-content">
+                                    <div className="ghost-line-title" style={{ width: index % 2 === 0 ? '70%' : '55%' }}></div>
+                                    <div className="ghost-line-subtitle" style={{ width: index % 2 === 0 ? '40%' : '60%' }}></div>
+                                </div>
+                                <div className="glass-card-arrow">
+                                    <ChevronRight size={20} color="#ffffff" />
+                                </div>
                             </div>
-                        )}
-                    </div>
-                    {/* Bouton pour ouvrir le clavier */}
-                    <div className="gta-contacts-footer" style={{ borderTop: 'none' }}>
-                        <div className="dialpad-icon" onClick={() => setShowDialpad(true)}>
-                            <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                        </div>
-                    </div>
-                </>
-            ) : (
-                // VUE 2 : LE CLAVIER TÉLÉPHONIQUE (DIALPAD)
-                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                    <div className="dialpad-display-container" style={{ borderBottom: 'none', height: '100px' }}>
-                        <div id="dialpad-display">{formatNumero(numero)}</div>
-                    </div>
-                    <div className="dialpad-grid">
-                        {['1','2','3','4','5','6','7','8','9'].map(n => (
-                            <button key={n} className="dial-btn" onClick={() => ajouterChiffre(n)}>{n}</button>
                         ))}
-                        <button onClick={effacerChiffre} style={{ color: '#e74c3c', fontSize: '24px', background: 'transparent', border: 'none', cursor: 'pointer' }}>❌</button>
-                        <button className="dial-btn" onClick={() => ajouterChiffre('0')}>0</button>
-                        <button onClick={appeler} style={{ color: '#2ecc71', fontSize: '28px', background: 'transparent', border: 'none', cursor: 'pointer' }}>📞</button>
-                    </div>
-                    <div className="gta-contacts-footer" style={{ marginTop: 'auto', borderTop: 'none' }}>
-                        <div style={{ color: '#fff', fontSize: '22px', cursor: 'pointer' }} onClick={effacerChiffre}>⌫</div>
-                        <div style={{ color: '#2ecc71', fontSize: '28px', transform: 'scaleX(-1)', cursor: 'pointer' }} onClick={appeler}>📞</div>
-                        <div style={{ color: '#e74c3c', fontSize: '26px', fontWeight: 900, cursor: 'pointer' }} onClick={() => setShowDialpad(false)}>↩</div>
-                    </div>
-                </div>
-            )}
 
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

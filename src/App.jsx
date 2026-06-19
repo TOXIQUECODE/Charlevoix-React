@@ -12,6 +12,7 @@ import ReglagesScreen from './components/ReglagesScreen';
 import NipScreen from './components/NipScreen';
 import WelcomeScreen from './components/WelcomeScreen'; // <-- 1. ON L'IMPORTE ICI
 
+
 export default function App() {
     const [pageActive, setPageActive] = useState('accueil');
     const [accesDebloque, setAccesDebloque] = useState(false);

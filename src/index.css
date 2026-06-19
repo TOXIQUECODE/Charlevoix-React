@@ -529,3 +529,73 @@ body {
   background: rgba(255, 255, 255, 0.9); /* Point allumé (blanc pur) */
   transform: scale(1.3); /* Le point actif grossit légèrement */
 }
+
+/* =========================================
+   CARTES DE LISTE (Activités, Magasins, Pêche...)
+========================================= */
+.glass-list-card {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.05); /* Verre ultra-fin */
+  border: 1px solid rgba(255, 255, 255, 0.08); /* Bordure lumineuse subtile */
+  border-radius: 16px; /* Arrondi doux Apple */
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  transition: transform 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.glass-list-card:active {
+  transform: scale(0.97); /* Effet d'enfoncement au clic */
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* L'espace pour l'image à gauche */
+.glass-card-image-placeholder {
+  width: 55px;
+  height: 55px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+  box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Conteneur du texte */
+.glass-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px; /* Espace entre les deux lignes */
+}
+
+/* Les lignes de texte "Fantômes" */
+.ghost-line-title {
+  width: 65%;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+}
+
+.ghost-line-subtitle {
+  width: 40%;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 20px;
+}
+
+/* La petite flèche à droite */
+.glass-card-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 10px;
+  opacity: 0.4;
+}
