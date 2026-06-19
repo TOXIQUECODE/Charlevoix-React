@@ -3,10 +3,12 @@
 ========================================= */
 /* Importation de la police "Inter" de Google (Style iOS/Apple pur) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+
 @font-face {
-  font-family: 'Beon';
-  src: url('https://cdn.jsdelivr.net/gh/noirblancrouge/Beon@master/Beon-Regular.otf') format('opentype');
-  font-weight: normal;
+  font-family: 'NeonGlowBold';
+  /* Si ton fichier est un .otf, change le .ttf ci-dessous en .otf */
+  src: url('/NeonGlowBold.ttf') format('truetype');
+  font-weight: bold;
   font-style: normal;
 }
 
