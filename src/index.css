@@ -476,3 +476,58 @@ body {
   height: 100%;
   width: 100%;
 }
+
+/* =========================================
+   SYSTÈME DE SWIPE (PAGES DE L'ACCUEIL)
+========================================= */
+.home-slider {
+  display: flex;
+  width: 100%;
+  flex: 1; /* Prend tout l'espace disponible au-dessus des points */
+  overflow-x: auto; /* Permet le défilement horizontal */
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory; /* Active l'effet "magnétique" du swipe */
+  scroll-behavior: smooth;
+  /* Masque la barre de défilement moche en bas */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.home-slider::-webkit-scrollbar {
+  display: none;
+}
+
+.home-page {
+  min-width: 100%; /* Force chaque page à prendre exactement la largeur de l'écran */
+  flex: none; /* Empêche les pages de s'écraser les unes sur les autres */
+  scroll-snap-align: start; /* Fait en sorte que la page s'arrête pile au bon endroit */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto; /* Permet de scroller de haut en bas DANS une page si besoin */
+}
+
+/* =========================================
+   LES PETITS POINTS DE NAVIGATION (iPHONE STYLE)
+========================================= */
+.pagination-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  height: 30px;
+  margin-bottom: 10px; /* Espace avec le bas de l'écran */
+  flex-shrink: 0;
+}
+
+.pagination-dots .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3); /* Point éteint (transparent) */
+  transition: all 0.3s ease;
+}
+
+.pagination-dots .dot.active {
+  background: rgba(255, 255, 255, 0.9); /* Point allumé (blanc pur) */
+  transform: scale(1.3); /* Le point actif grossit légèrement */
+}

@@ -1,17 +1,15 @@
 import { useEffect, useState } from 'react';
 import AppIcon from './AppIcon';
 import { supabase } from '../supabaseClient';
-// J'ai corrigé MapPin en Map ici pour correspondre à ton code plus bas
 import { TreePine, ShoppingBag, Map, Fish, Utensils, User, Camera, Settings, Rocket, Sun, CloudSun, Cloud, CloudRain, CloudLightning, Snowflake, Moon } from 'lucide-react';
 
 // ==============================================================
-// 1. LE COMPOSANT WIDGET METEO (L'intelligence de la météo)
+// 1. LE COMPOSANT WIDGET METEO
 // ==============================================================
 function WidgetMeteo({ onClick }) {
     const [meteo, setMeteo] = useState({ temp: '--', condition: 'Chargement...', icon: <CloudSun size={26} color="#f1c40f" /> });
 
     useEffect(() => {
-        // API Open-Meteo pour Baie-Saint-Paul
         const url = "https://api.open-meteo.com/v1/forecast?latitude=47.44&longitude=-70.50&current=temperature_2m,is_day,weather_code&timezone=America%2FNew_York";
 
         fetch(url)
@@ -28,7 +26,7 @@ function WidgetMeteo({ onClick }) {
                     conditionTexte = "Dégagé";
                     IconeMeteo = isDay ? <Sun size={26} color="#f1c40f" /> : <Moon size={26} color="#f39c12" />;
                 } else if (code === 1 || code === 2 || code === 3) {
-                    conditionTexte = "Partiellement nuageux";
+                    conditionTexte = "Part. nuageux";
                     IconeMeteo = isDay ? <CloudSun size={26} color="#f1c40f" /> : <Cloud size={26} color="#bdc3c7" />;
                 } else if (code >= 45 && code <= 48) {
                     conditionTexte = "Brouillard";
@@ -75,10 +73,17 @@ function WidgetMeteo({ onClick }) {
 }
 
 // ==============================================================
-// 2. L'ÉCRAN D'ACCUEIL PRINCIPAL
+// 2. L'ÉCRAN D'ACCUEIL AVEC SWIPE (PAGE 1 & PAGE 2)
 // ==============================================================
 export default function HomeScreen({ onOuvrirApp }) {
     const [chaletInfo, setChaletInfo] = useState("Recherche signal GPS...");
+    const [activePage, setActivePage] = useState(0);
+
+    // Fonction pour détecter sur quelle page on se trouve
+    const handleScroll = (e) => {
+        const pageIndex = Math.round(e.target.scrollLeft / e.target.clientWidth);
+        setActivePage(pageIndex);
+    };
 
     useEffect(() => {
         // Restaurer le fond d'écran
@@ -93,8 +98,6 @@ export default function HomeScreen({ onOuvrirApp }) {
                 navigator.geolocation.getCurrentPosition(async (position) => {
                     const userLat = position.coords.latitude;
                     const userLng = position.coords.longitude;
-
-                    // On va chercher le chalet dans Supabase
                     const { data } = await supabase.from('localisation').select('lat, lng').ilike('nom', '%chalet%').single();
 
                     if (data && data.lat && data.lng) {
@@ -120,7 +123,6 @@ export default function HomeScreen({ onOuvrirApp }) {
                 });
             }
         }
-
         obtenirGPS();
     }, []);
 
@@ -129,45 +131,57 @@ export default function HomeScreen({ onOuvrirApp }) {
             <div className="grid-background"></div>
 
             <div className="vue active gta-home-bg">
-                <div className="app-grid">
-                    <AppIcon icon={<TreePine size={34} color="#2ecc71" />} name="Activités" onClick={() => onOuvrirApp('activites')} />
-                    <AppIcon icon={<ShoppingBag size={34} color="#f39c12" />} name="Magasins" onClick={() => onOuvrirApp('magasins')} />
-                    <AppIcon icon={<Map size={34} color="#e74c3c" />} name="Cartes" onClick={() => onOuvrirApp('cartes')} />
-                    <AppIcon icon={<Fish size={34} color="#3498db" />} name="Pêche" onClick={() => onOuvrirApp('peche')} />
-                    <AppIcon icon={<Utensils size={34} color="#d35400" />} name="Recettes" onClick={() => onOuvrirApp('recettes')} />
-                    <AppIcon icon={<Camera size={34} color="#9b59b6" />} name="Galerie" onClick={() => onOuvrirApp('galerie')} />
-                    <AppIcon icon={<User size={34} color="#34495e" />} name="Contacts" onClick={() => onOuvrirApp('contacts')} />
-                    <AppIcon icon={<Settings size={34} color="#7f8c8d" />} name="Réglages" onClick={() => onOuvrirApp('reglages')} />
-                    <AppIcon icon={<Rocket size={34} color="#ff4757" />} name="WIP" onClick={() => onOuvrirApp('secret')} />
-                </div>
 
-                {/* CONTENEUR POUR LES WIDGETS */}
-                <div className="widgets-container" style={{ display: 'flex', flexDirection: 'column', gap: '15px', padding: '20px' }}>
+                {/* LE CONTENEUR QUI GLISSE */}
+                <div className="home-slider" onScroll={handleScroll}>
 
-                    {/* WIDGET CHALET */}
-                    <div
-                        className="gta-widget"
-                        onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
-                        style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
-                    >
-                        <img
-                            src="/chalet.png"
-                            alt="Chalet"
-                            className="widget-image"
-                            style={{ width: '65px', height: '65px', objectFit: 'cover', borderRadius: '8px' }}
-                        />
-                        <div>
-                            <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
-                            <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                                {chaletInfo}
+                    {/* ================= PAGE 1 ================= */}
+                    <div className="home-page">
+                        <div className="app-grid">
+                            <AppIcon icon={<TreePine size={34} color="#2ecc71" />} name="Activités" onClick={() => onOuvrirApp('activites')} />
+                            <AppIcon icon={<ShoppingBag size={34} color="#f39c12" />} name="Magasins" onClick={() => onOuvrirApp('magasins')} />
+                            <AppIcon icon={<Map size={34} color="#e74c3c" />} name="Cartes" onClick={() => onOuvrirApp('cartes')} />
+                            <AppIcon icon={<Fish size={34} color="#3498db" />} name="Pêche" onClick={() => onOuvrirApp('peche')} />
+                            <AppIcon icon={<Utensils size={34} color="#d35400" />} name="Recettes" onClick={() => onOuvrirApp('recettes')} />
+                            <AppIcon icon={<User size={34} color="#34495e" />} name="Contacts" onClick={() => onOuvrirApp('contacts')} />
+                        </div>
+
+                        {/* WIDGETS DE LA PAGE 1 */}
+                        <div className="widgets-container" style={{ display: 'flex', flexDirection: 'column', gap: '15px', padding: '0 20px', marginTop: 'auto' }}>
+                            <div
+                                className="gta-widget"
+                                onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
+                                style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer', margin: '0 !important' }}
+                            >
+                                <img src="/chalet.png" alt="Chalet" className="widget-image" style={{ width: '65px', height: '65px', objectFit: 'cover', borderRadius: '8px' }} />
+                                <div>
+                                    <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
+                                    <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                                        {chaletInfo}
+                                    </div>
+                                </div>
                             </div>
+                            <WidgetMeteo onClick={() => onOuvrirApp('meteo')} />
                         </div>
                     </div>
 
-                    {/* WIDGET METEO INTELLIGENT */}
-                    <WidgetMeteo onClick={() => onOuvrirApp('meteo')} />
+                    {/* ================= PAGE 2 ================= */}
+                    <div className="home-page">
+                        <div className="app-grid">
+                            <AppIcon icon={<Camera size={34} color="#9b59b6" />} name="Galerie" onClick={() => onOuvrirApp('galerie')} />
+                            <AppIcon icon={<Settings size={34} color="#7f8c8d" />} name="Réglages" onClick={() => onOuvrirApp('reglages')} />
+                            <AppIcon icon={<Rocket size={34} color="#ff4757" />} name="Projet X" onClick={() => onOuvrirApp('secret')} />
+                        </div>
+                    </div>
 
                 </div>
+
+                {/* LES PETITS POINTS DE NAVIGATION */}
+                <div className="pagination-dots">
+                    <div className={`dot ${activePage === 0 ? 'active' : ''}`}></div>
+                    <div className={`dot ${activePage === 1 ? 'active' : ''}`}></div>
+                </div>
+
             </div>
         </div>
     );
