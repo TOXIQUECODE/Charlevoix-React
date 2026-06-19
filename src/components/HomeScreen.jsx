@@ -62,7 +62,7 @@ export default function HomeScreen({ onOuvrirApp }) {
                 <AppIcon icon="⚙️" name="Réglages" onClick={() => onOuvrirApp('reglages')} />
 
                 {/* Ajout de la fusée pour ton futur projet */}
-                <AppIcon icon="🚀" name="Projet X" onClick={() => onOuvrirApp('secret')} />
+                <AppIcon icon="🚀" name="" onClick={() => onOuvrirApp('secret')} />
             </div>
 
             <div
