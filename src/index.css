@@ -386,7 +386,7 @@ body {
   -webkit-background-clip: text;
 
   /* L'ANIMATION : 4 secondes l'aller, 'alternate' gère le retour fluide ! */
-  animation: text-shimmer 4s infinite alternate ease-in-out;
+  animation: text-shimmer 14s infinite alternate ease-in-out;
 }
 
 /* Le moteur : de 100% à 0%, et 'alternate' s'occupe de faire 0% à 100% */
