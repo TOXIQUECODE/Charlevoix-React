@@ -122,46 +122,6 @@ export default function HomeScreen({ onOuvrirApp }) {
                     </div>
                 </div>
             </div>
-
-
-            <div
-                className="gta-widget"
-                /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA CARTE */
-                onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
-                style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
-            >
-                <img
-                    src="/chalet.png"
-                    alt="Chalet"
-                    className="widget-image"
-                    style={{
-                        width: '65px',
-                        height: '65px',
-                        objectFit: 'cover',
-                        borderRadius: '8px'
-                    }}
-                />
-
-                <div>
-                    <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
-                    <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
-                        {chaletInfo}
-                    </div>
-                </div>
-            </div>
-
-            <div
-                className="gta-widget"
-                /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA MÉTÉO */
-                onClick={() => window.open('https://www.meteomedia.com/fr/ville/ca/quebec/baie-saint-paul/7-jours', '_blank')}
-                style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '-15px', cursor: 'pointer' }}
-            >
-                <div style={{ fontSize: '32px' }}>⛅</div>
-                <div>
-                    <div><strong>Météo Charlevoix ↗</strong></div>
-                    <div style={{ color: '#3498db', fontSize: '12px', marginTop: '3px' }}>22°C - Partiellement nuageux</div>
-                </div>
-            </div>
         </div>
     );
 }
