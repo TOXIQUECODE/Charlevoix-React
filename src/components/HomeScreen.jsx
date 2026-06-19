@@ -71,6 +71,56 @@ export default function HomeScreen({ onOuvrirApp }) {
 
                     <AppIcon icon={<Rocket size={34} color="#ff4757" />} name="WIP" onClick={() => onOuvrirApp('secret')} />
                 </div>
+                <div
+                    className="gta-widget"
+                    /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA CARTE */
+                    onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
+                    style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
+                >
+                    <img
+                        src="/chalet.png"
+                        alt="Chalet"
+                        className="widget-image"
+                        style={{
+                            width: '65px',
+                            height: '65px',
+                            objectFit: 'cover',
+                            borderRadius: '8px'
+                        }}
+                    />
+
+                    <div>
+                        <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
+                        <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                            {chaletInfo}
+                        </div>
+                    </div>
+                </div>
+                <div
+                    className="gta-widget"
+                    /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA CARTE */
+                    onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
+                    style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
+                >
+                    <img
+                        src="/chalet.png"
+                        alt="Chalet"
+                        className="widget-image"
+                        style={{
+                            width: '65px',
+                            height: '65px',
+                            objectFit: 'cover',
+                            borderRadius: '8px'
+                        }}
+                    />
+
+                    <div>
+                        <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
+                        <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                            {chaletInfo}
+                        </div>
+                    </div>
+                </div>
             </div>
 
 
