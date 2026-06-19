@@ -331,11 +331,11 @@ body {
 }
 
 .welcome-title {
-  font-family: 'Beon', sans-serif;
-  font-size: 85px; /* Beon demande à être affichée en grand ! */
+  font-family: 'NeonGlowBold', sans-serif;
+  font-size: 85px;
   color: #fff;
   margin-bottom: 25px;
-  letter-spacing: 4px; /* On espace les lettres pour que le néon respire */
+  letter-spacing: 4px;
   animation: neon-flicker 3s infinite alternate;
 }
 
