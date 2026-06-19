@@ -50,23 +50,23 @@ export default function HomeScreen({ onOuvrirApp }) {
     }, []);
 
     return (
-      <div className="main-wrapper">
-        <div className="grid-background">
+        <div className="main-wrapper">
+            <div className="grid-background"></div>
 
-        <div className="vue active gta-home-bg">
-            <div className="app-grid">
-                <AppIcon icon="🌲" name="Activités" onClick={() => onOuvrirApp('activites')} />
-                <AppIcon icon="🛍️" name="Magasins" onClick={() => onOuvrirApp('magasins')} />
-                <AppIcon icon="📍" name="Cartes" onClick={() => onOuvrirApp('cartes')} />
-                <AppIcon icon="🎣" name="Pêche" onClick={() => onOuvrirApp('peche')} />
-                <AppIcon icon="🍳" name="Recettes" onClick={() => onOuvrirApp('recettes')} />
-                <AppIcon icon="📸" name="Galerie" onClick={() => onOuvrirApp('galerie')} />
-                <AppIcon icon="👤" name="Contacts" onClick={() => onOuvrirApp('contacts')} />
-                <AppIcon icon="⚙️" name="Réglages" onClick={() => onOuvrirApp('reglages')} />
-
-                {/* Ajout de la fusée pour ton futur projet */}
-                <AppIcon icon="🚀" name="" onClick={() => onOuvrirApp('secret')} />
+            <div className="vue active gta-home-bg">
+                <div className="app-grid">
+                    <AppIcon icon="🌲" name="Activités" onClick={() => onOuvrirApp('activites')} />
+                    <AppIcon icon="🛍️" name="Magasins" onClick={() => onOuvrirApp('magasins')} />
+                    <AppIcon icon="📍" name="Cartes" onClick={() => onOuvrirApp('cartes')} />
+                    <AppIcon icon="🎣" name="Pêche" onClick={() => onOuvrirApp('peche')} />
+                    <AppIcon icon="🍳" name="Recettes" onClick={() => onOuvrirApp('recettes')} />
+                    <AppIcon icon="📸" name="Galerie" onClick={() => onOuvrirApp('galerie')} />
+                    <AppIcon icon="👤" name="Contacts" onClick={() => onOuvrirApp('contacts')} />
+                    <AppIcon icon="⚙️" name="Réglages" onClick={() => onOuvrirApp('reglages')} />
+                    <AppIcon icon="🚀" name="Projet X" onClick={() => onOuvrirApp('secret')} />
+                </div>
             </div>
+        
 
             <div
                 className="gta-widget"
