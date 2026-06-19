@@ -356,10 +356,46 @@ body {
 }
 
 .welcome-text {
-  font-size: 17px;
-  color: #888;
+  font-size: 18px; /* Un poil plus grand pour bien voir la flamme */
   margin-bottom: 45px;
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  display: inline-block; /* Requis pour l'animation du fond */
+
+  /* LES VARIABLES DE LA FLAMME */
+  --offset: 3ch;
+  --angle: 100deg;
+  --base-color: #555555; /* Le gris du texte quand la flamme n'est pas là */
+
+  background:
+    /* 1. La flamme (Orange/Rouge) qui va se déplacer */
+          linear-gradient(
+                  var(--angle),
+                  transparent calc(50% - var(--offset)),
+                  hsl(45 100% 60%) calc(50% - (var(--offset) - 0.5ch)),
+                  hsl(0 100% 50%),
+                  transparent calc(50% + var(--offset))
+          ) 0 0 / 300% 100% no-repeat border-box,
+            /* 2. La couleur de base fixe en dessous */
+          linear-gradient(var(--base-color), var(--base-color)) padding-box;
+
+  /* On découpe le fond en forme de texte */
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text; /* Pour Safari et iOS */
+
+  /* On lance l'animation */
+  animation: text-shimmer 3s infinite both ease-in-out;
+}
+
+/* Le moteur de l'animation qui fait balayer la flamme de droite à gauche */
+@keyframes text-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  50%, 100% {
+    background-position: 0% 0;
+  }
 }
 
 .welcome-btn {

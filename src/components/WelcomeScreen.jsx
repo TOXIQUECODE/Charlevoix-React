@@ -29,7 +29,7 @@ export default function WelcomeScreen() {
         <div className={`welcome-container ${disparition ? 'hidden' : ''}`}>
             <div className="welcome-content">
                 <h1 className="welcome-title">BIENVENUE</h1>
-                <p className="welcome-text">Bienvenue dans votre espace Charlevoix.</p>
+                <p className="welcome-text">Bienvenue dans votre espace organisationelle.</p>
                 <button className="welcome-btn" onClick={handleStart}>
                     Démarrer
                 </button>
