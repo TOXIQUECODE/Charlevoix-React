@@ -3,23 +3,39 @@
 ========================================= */
 /* Importation de la police "Inter" de Google (Style iOS/Apple pur) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&display=swap');
+@font-face {
+  font-family: 'Beon';
+  src: url('https://cdn.jsdelivr.net/gh/noirblancrouge/Beon@master/Beon-Regular.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 @keyframes zoomIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Animation douce pour le mot "Bonjour" */
-@keyframes pulse {
-  0% { opacity: 0.8; transform: scale(0.99); }
-  50% { opacity: 1; transform: scale(1.01); text-shadow: 0 0 15px rgba(255,255,255,0.3); }
-  100% { opacity: 0.8; transform: scale(0.99); }
+/* L'animation ultra-réaliste du tube néon */
+@keyframes neon-flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% {
+    text-shadow:
+            0 0 5px #fff,
+            0 0 10px #fff,
+            0 0 20px #1df2f0,
+            0 0 40px #1df2f0,
+            0 0 80px #1df2f0,
+            0 0 100px #1df2f0;
+    opacity: 1;
+  }
+  20%, 24%, 55% {
+    text-shadow: none;
+    opacity: 0.4;
+  }
 }
 
 :root {
-  /* On applique Inter partout dans l'application */
-  --font-stack: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  /* On remet Inter pour le reste de l'interface du téléphone */
+  --font-stack: "Inter", -apple-system, sans-serif;
   --app-bg: #ffffff;
 }
 
@@ -313,13 +329,12 @@ body {
 }
 
 .welcome-title {
-  font-size: 52px;
-  font-weight: 400;
-  letter-spacing: -1px;
-  margin-bottom: 15px;
-  animation: pulse 3s infinite;
-  font-family: "Bungee Shade", sans-serif;
-  font-style: normal;
+  font-family: 'Beon', sans-serif;
+  font-size: 85px; /* Beon demande à être affichée en grand ! */
+  color: #fff;
+  margin-bottom: 25px;
+  letter-spacing: 4px; /* On espace les lettres pour que le néon respire */
+  animation: neon-flicker 3s infinite alternate;
 }
 
 .welcome-text {
