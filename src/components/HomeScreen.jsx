@@ -161,7 +161,7 @@ export default function HomeScreen({ onOuvrirApp }) {
                                     </div>
                                 </div>
                             </div>
-                            <WidgetMeteo onClick={() => onOuvrirApp('meteo')} />
+                            <WidgetMeteo onClick={() => window.open('https://www.meteomedia.com/fr/ville/ca/quebec/baie-saint-paul/actuelle', '_blank')} />
                         </div>
                     </div>
 

@@ -8,7 +8,6 @@
 
 @font-face {
   font-family: 'DroplineRegular';
-  /* Change le .ttf en .otf si c'est le format de ton fichier */
   src: url('/DroplineRegular.otf') format('postscript');
   font-weight: normal;
   font-style: normal;
