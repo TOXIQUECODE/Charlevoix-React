@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import AppIcon from './AppIcon';
 import { supabase } from '../supabaseClient';
-import { TreePine, ShoppingBag, Map, Fish, Utensils, Camera, User, Settings, Rocket } from 'lucide-react';
+import { TreePine, ShoppingBag, Map, Fish, Utensils, Camera, CloudSun, User, Settings, Rocket } from 'lucide-react';
 
 
 

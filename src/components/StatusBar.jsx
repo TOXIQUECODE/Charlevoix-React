@@ -8,7 +8,7 @@ export default function StatusBar() {
         const mettreAJourTemps = () => {
             const now = new Date();
             const jours = ['DIMANCHE', 'LUNDI', 'MARDI', 'MERCREDI', 'JEUDI', 'VENDREDI', 'SAMEDI'];
-            setJour('☀️ ' + jours[now.getDay()]);
+            setJour('' + jours[now.getDay()]);
             setHeure(now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0'));
         };
 
