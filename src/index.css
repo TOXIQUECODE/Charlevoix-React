@@ -218,41 +218,41 @@ body {
   gap: 8px;
 }
 
+/* =========================================
+   ICÔNES (Style Glassmorphism Final)
+========================================= */
 .app-icon {
-  position: relative; /* Indispensable pour superposer le net et le flou */
+  position: relative;
   width: 70px;
   height: 70px;
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.85); /* Blanc vitré */
+  background: rgba(255, 255, 255, 0.85);
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  overflow: hidden; /* Important pour garder le flou dans la boîte */
 }
 
-.app-icon-wrapper:active .app-icon {
-  transform: scale(0.92);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* L'émoji net au premier plan */
+/* Le texte net devant */
 .app-icon-text {
   font-size: 32px;
   position: relative;
   z-index: 2;
 }
 
-/* L'émoji flou en arrière-plan qui fait la lumière colorée */
+/* Le flou derrière qui crée la lueur colorée */
 .app-icon-blur {
   font-size: 45px;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  filter: blur(10px);
-  opacity: 0.6;
+  filter: blur(8px);
+  opacity: 0.7;
   z-index: 1;
+  pointer-events: none;
 }
 
 .app-name {

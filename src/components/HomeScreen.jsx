@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import AppIcon from './AppIcon';
+import AppIcon from 'src/components/AppIcon.jsx';
 import { supabase } from '../supabaseClient';
 
 export default function HomeScreen({ onOuvrirApp }) {

@@ -1,4 +1,4 @@
-// src/components/AppIcon.jsx
+// Dans src/components/AppIcon.jsx
 export default function AppIcon({ icon, name, onClick }) {
     return (
         <div className="app-icon-wrapper" onClick={onClick}>
