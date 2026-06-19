@@ -23,10 +23,10 @@
     text-shadow:
             0 0 5px #fff,
             0 0 10px #fff,
-            0 0 20px #1df2f0,
-            0 0 40px #1df2f0,
-            0 0 80px #1df2f0,
-            0 0 100px #1df2f0;
+            0 0 20px #7db2b2,
+            0 0 40px #7db2b2,
+            0 0 80px #7db2b2,
+            0 0 100px #7db2b2;
     opacity: 1;
   }
   20%, 24%, 55% {
@@ -332,8 +332,8 @@ body {
 
 .welcome-title {
   font-family: 'NeonGlowItalic', sans-serif;
-  font-size: 85px;
-  color: #fff;
+  font-size: 70px;
+  color: #2f4f4f;
   margin-bottom: 25px;
   letter-spacing: 4px;
   animation: neon-flicker 3s infinite alternate;
