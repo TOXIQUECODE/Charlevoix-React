@@ -3,6 +3,7 @@
 ========================================= */
 /* Importation de la police "Inter" de Google (Style iOS/Apple pur) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
+@import url('https://dl.dafont.com/dl/?f=neonblitz');
 
 @keyframes zoomIn {
   from { opacity: 0; transform: scale(0.95); }
