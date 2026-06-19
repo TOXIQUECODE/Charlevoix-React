@@ -5,7 +5,7 @@ export default function WelcomeScreen() {
     const [disparition, setDisparition] = useState(false);
 
     useEffect(() => {
-        // Vérifie si c'est la première visite
+        // On vérifie si c'est la première visite
         const hasVisited = localStorage.getItem('ifruit-first-visit');
         if (!hasVisited) {
             setVisible(true);
@@ -13,7 +13,10 @@ export default function WelcomeScreen() {
     }, []);
 
     const handleStart = () => {
+        // On déclenche la classe CSS "hidden"
         setDisparition(true);
+
+        // On attend la fin de l'animation CSS (500ms) pour supprimer l'écran
         setTimeout(() => {
             localStorage.setItem('ifruit-first-visit', 'true');
             setVisible(false);
@@ -24,24 +27,11 @@ export default function WelcomeScreen() {
 
     return (
         <div className={`welcome-container ${disparition ? 'hidden' : ''}`}>
-
-            {/* La grille d'arrière-plan du CodePen */}
-            <div className="codepen-grid-bg"></div>
-
             <div className="welcome-content">
-
-                {/* Le texte avec l'effet Aurora/Hologramme du CodePen */}
-                <div className="codepen-text-wrapper">
-                    <p className="codepen-shimmer-text">
-                        BIENVENUE
-                    </p>
-                    <p className="welcome-subtitle">
-                        Dans votre espace Charlevoix.
-                    </p>
-                </div>
-
+                <h1 className="welcome-title">BIENVENUE</h1>
+                <p className="welcome-text">Bienvenue dans votre espace organisationelle.</p>
                 <button className="welcome-btn" onClick={handleStart}>
-                    Démarrer l'expérience
+                    Démarrer
                 </button>
             </div>
         </div>
