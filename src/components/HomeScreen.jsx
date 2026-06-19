@@ -65,7 +65,7 @@ export default function HomeScreen({ onOuvrirApp }) {
             <div
                 className="gta-widget"
                 /* C'EST ICI QU'ON AJOUTE LE LIEN VERS LA CARTE */
-                onClick={() => window.open('https://www.google.com/maps/dir/?api=1&destination=Les+Eboulements,QC', '_blank')}
+                onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
                 style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}
             >
                 <div style={{ fontSize: '32px' }}>🏕️</div>
