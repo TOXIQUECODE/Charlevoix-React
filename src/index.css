@@ -482,27 +482,26 @@ body {
 .home-slider {
   display: flex;
   width: 100%;
-  flex: 1; /* Prend tout l'espace disponible au-dessus des points */
-  overflow-x: auto; /* Permet le défilement horizontal */
+  flex: 1;
+  overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: x mandatory; /* Active l'effet "magnétique" du swipe */
-  scroll-behavior: smooth;
-  /* Masque la barre de défilement moche en bas */
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  scroll-snap-type: x mandatory; /* Le magnétisme strict horizontal */
+  -webkit-overflow-scrolling: touch; /* Indispensable pour la fluidité sur iPhone/Android */
+  scrollbar-width: none; /* Cache la barre Firefox */
 }
 .home-slider::-webkit-scrollbar {
-  display: none;
+  display: none; /* Cache la barre Chrome/Safari */
 }
 
 .home-page {
-  min-width: 100%; /* Force chaque page à prendre exactement la largeur de l'écran */
-  flex: none; /* Empêche les pages de s'écraser les unes sur les autres */
-  scroll-snap-align: start; /* Fait en sorte que la page s'arrête pile au bon endroit */
+  flex: 0 0 100%; /* Force la page à faire 100% exact de la largeur, sans s'écraser */
+  width: 100%;
+  scroll-snap-align: center; /* Verrouille la page parfaitement au milieu */
+  scroll-snap-stop: always; /* Force le slider à s'arrêter page par page */
   display: flex;
   flex-direction: column;
-  height: 100%;
-  overflow-y: auto; /* Permet de scroller de haut en bas DANS une page si besoin */
+  /* On s'assure qu'il n'y a pas de marges invisibles qui cassent le centrage */
+  margin: 0;
 }
 
 /* =========================================
