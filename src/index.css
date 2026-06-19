@@ -41,7 +41,6 @@
 :root {
   /* On remet Inter pour le reste de l'interface du téléphone */
   --font-stack: "Inter", -apple-system, sans-serif;
-  --app-bg: #ffffff;
 }
 
 .grid-background {
