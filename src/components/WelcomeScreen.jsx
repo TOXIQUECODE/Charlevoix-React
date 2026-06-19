@@ -13,10 +13,11 @@ export default function WelcomeScreen() {
 
     const handleStart = () => {
         setDisparition(true);
+        // J'ai augmenté un peu le temps (800ms) pour bien profiter de la nouvelle transition 3D
         setTimeout(() => {
             localStorage.setItem('ifruit-first-visit', 'true');
             setVisible(false);
-        }, 500);
+        }, 800);
     };
 
     if (!visible) return null;
@@ -24,19 +25,8 @@ export default function WelcomeScreen() {
     return (
         <div className={`welcome-container ${disparition ? 'hidden' : ''}`}>
             <div className="welcome-content">
-
-                {/* LE TITRE NÉON : Le premier 'E' et le 'N' vont clignoter ! */}
-                <div className="welcome-title">
-                    <b>BI<span>E</span>NVE<span>N</span>UE</b>
-                </div>
-
-                {/* Le sous-titre */}
-                <p className="welcome-text">Dans votre espace Charlevoix.</p>
-
-                <button className="welcome-btn" onClick={handleStart}>
-                    Démarrer
-                </button>
-
+                <h1 className="welcome-title">BIENVENUE</h1>
+                <p className="welcome-text">Bienvenue dans votre espace organisationelle.</p>
             </div>
         </div>
     );
