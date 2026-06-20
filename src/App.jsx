@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import StatusBar from './components/StatusBar';
 import HomeScreen from './components/HomeScreen';
 import ActivitesScreen from './components/ActivitesScreen';
@@ -23,6 +23,15 @@ export default function App() {
         if (vuesProtegees.includes(pageActive) && !accesDebloque) {
             return <NipScreen onUnlock={() => setAccesDebloque(true)} onCancel={() => setPageActive('accueil')} />;
         }
+        // On charge l'icône sauvegardée, sinon c'est guimauve par défaut
+        const [homeIcon, setHomeIcon] = useState(localStorage.getItem('ifruit-home-icon') || 'guimauve');
+
+// On écoute le signal de changement venant des réglages
+        useEffect(() => {
+            const handleIconChange = (e) => setHomeIcon(e.detail);
+            window.addEventListener('changeHomeIcon', handleIconChange);
+            return () => window.removeEventListener('changeHomeIcon', handleIconChange);
+        }, []);
         return (
             <>
                 {pageActive === 'accueil' && <HomeScreen onOuvrirApp={setPageActive} />}

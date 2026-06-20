@@ -44,32 +44,27 @@
 
 .grid-background {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  top: 0; left: 0; width: 100vw; height: 100vh;
   z-index: -1;
-  background: conic-gradient(from 180deg at 50% 70%, hsla(0,0%,98%,1) 0deg, #eec32d 72deg, #ec4b4b 144deg, #709ab9 216deg, #4dffbf 288deg, hsla(0,0%,98%,1) 1turn);
-  mask:
-          radial-gradient(circle at 50% 50%, white 2px, transparent 2.5px) 50% 50% / 20px 20px,
-          url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px 256px;
-  mask-composite: intersect;
-  -webkit-mask-composite: source-in; /* INDISPENSABLE POUR CHROME ET MOBILE */
-  animation: flicker 20s infinite linear;
+  background-color: #050505;
+  /* Grille de points avec effet néon */
+  background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px);
+  background-size: 35px 35px;
+  animation: infinite-grid 20s linear infinite;
+}
+
+/* Le halo de lumière qui donne la profondeur */
+.grid-background::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(circle at 50% 50%, transparent 20%, #000 100%);
   pointer-events: none;
 }
 
-@keyframes flicker {
-  to {
-    mask-position: 50% 50%, 0 50%;
-  }
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
+@keyframes infinite-grid {
+  0% { background-position: 0px 0px; }
+  100% { background-position: 35px 35px; } /* Glissement parfait sans coupure */
 }
 
 /* =========================================
@@ -121,29 +116,33 @@ body {
 }
 
 /* LE BOUTON HOME */
-.home-btn-area {
-  height: 70px;
-  flex-shrink: 0;
+.home-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #333;
   background: #111;
+  cursor: pointer;
+  transition: all 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-top: 1px solid #222;
-  z-index: 50;
-  width: 100%;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 2px 5px rgba(0,0,0,0.5);
+  overflow: hidden; /* Empêche l'image de dépasser */
 }
 
-.home-btn {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  border: 2px solid #555;
-  background: #1a1a1a;
-  cursor: pointer;
-  transition: 0.1s;
+.home-btn:active {
+  background: #222;
+  transform: scale(0.95);
 }
 
-.home-btn:active { background: #333; }
+.home-btn-image {
+  width: 60%; /* Laisse une belle marge (ne touche pas les bords) */
+  height: 60%;
+  object-fit: contain; /* Garde les proportions de tes PNG */
+  filter: drop-shadow(0 2px 3px rgba(255,255,255,0.2)); /* Petit effet de lumière */
+  transition: transform 0.3s ease;
+}
 
 /* =========================================
    LA BARRE D'ÉTAT (Heure, LTE)

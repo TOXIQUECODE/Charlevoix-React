@@ -1,67 +1,83 @@
 import { useState } from 'react';
+import { Settings, Palette } from 'lucide-react';
 
 export default function ReglagesScreen() {
-    const [bgVal, setBgVal] = useState('');
+    // Les choix disponibles (les noms exacts de tes fichiers .png dans /public)
+    const optionsIcones = [
+        { id: 'guimauve', nom: 'Guimauve', emoji: '🍡' },
+        { id: 'feuille', nom: 'Feuille', emoji: '🍃' },
+        { id: 'feu', nom: 'Feu', emoji: '🔥' },
+        { id: 'capybara', nom: 'Capybara', emoji: '🦦' },
+        { id: 'lapin', nom: 'Lapin', emoji: '🐰' },
+        { id: 'poisson', nom: 'Poisson', emoji: '🐟' }
+    ];
 
-    const appliquerFond = () => {
-        if (!bgVal) return;
-        let finalBg = bgVal;
-        const bgLower = bgVal.toLowerCase().trim();
+    // On récupère l'icône actuelle
+    const [iconeActive, setIconeActive] = useState(localStorage.getItem('ifruit-home-icon') || 'guimauve');
 
-        // Ton super dictionnaire Apple/Nature
-        const dictionnaire = {
-            'bleu': 'linear-gradient(135deg, #007AFF, #0056b3)',
-            'vert': 'linear-gradient(135deg, #34C759, #248A3D)',
-            'rouge': 'linear-gradient(135deg, #FF3B30, #B3241D)',
-            'orange': 'linear-gradient(135deg, #FF9500, #B36800)',
-            'violet': 'linear-gradient(135deg, #AF52DE, #7B399C)',
-            'noir': 'linear-gradient(180deg, #333333, #000000)',
-            'gris': 'linear-gradient(135deg, #8E8E93, #48484A)',
-            'nature': 'linear-gradient(135deg, #2ecc71, #f1c40f)',
-            'ocean': 'linear-gradient(135deg, #2193b0, #6dd5ed)',
-            'aurore': 'linear-gradient(135deg, #ff9966, #ff5e62)',
-            'nuit': 'linear-gradient(135deg, #141e30, #243b55)',
-            'foret': 'linear-gradient(135deg, #134e5e, #71b280)'
-        };
+    // Fonction pour changer l'icône
+    const changerIcone = (id) => {
+        setIconeActive(id);
+        localStorage.setItem('ifruit-home-icon', id); // Sauvegarde
 
-        if (dictionnaire[bgLower]) {
-            finalBg = dictionnaire[bgLower];
-        } else if (bgLower.startsWith('http')) {
-            finalBg = `url('${bgVal}') center/cover no-repeat`;
-        }
-
-        // On sauvegarde la préférence dans le navigateur
-        localStorage.setItem('ifruit-bg', finalBg);
-
-        // On met à jour l'écran d'accueil en direct
-        const homeElement = document.querySelector('.gta-home-bg');
-        if (homeElement) homeElement.style.background = finalBg;
-
-        setBgVal('');
-        alert("Nouveau thème appliqué ! Appuie sur le bouton Home pour voir le résultat.");
+        // On envoie le signal au bouton (dans App.jsx) pour qu'il change instantanément
+        window.dispatchEvent(new CustomEvent('changeHomeIcon', { detail: id }));
     };
 
     return (
-        <div className="vue active app-page">
-            <header className="app-header"><h2>⚙️ Réglages</h2></header>
+        <div className="vue active app-page" style={{ background: 'transparent' }}>
+            <header className="app-header" style={{ background: 'rgba(255, 255, 255, 0.05)', backdropFilter: 'blur(10px)', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <h2 style={{ textShadow: '0 2px 4px rgba(0,0,0,0.5)', color: 'white' }}>⚙️ Réglages</h2>
+            </header>
+
             <div className="app-content">
 
-                <div className="dev-card" style={{ borderBottom: 'none', borderRadius: '12px', border: '1px solid #eaeaea' }}>
-                    <div className="dev-header">🎨 Fond d'écran de l'accueil</div>
-                    <div className="dev-body" style={{ display: 'block' }}>
-                        <p style={{ fontSize: '13px', color: '#666', marginBottom: '10px' }}>
-                            Couleurs dispo: nature, ocean, aurore, foret, nuit, bleu, vert, rouge... ou colle un lien image (http...).
-                        </p>
-                        <input
-                            type="text"
-                            className="glass-input"
-                            placeholder="Ex: foret, ocean ou lien image"
-                            value={bgVal}
-                            onChange={(e) => setBgVal(e.target.value)} // On lie l'input à notre variable React
-                        />
-                        <button onClick={appliquerFond} className="glass-btn-submit">
-                            Appliquer & Sauvegarder
-                        </button>
+                {/* SECTION PERSONNALISATION */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(15px)', marginBottom: '20px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white', fontWeight: 'bold', fontSize: '16px', marginBottom: '15px', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                        <Palette size={20} color="#f1c40f" /> Personnalisation Bouton
+                    </div>
+
+                    {/* Grille des boutons */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                        {optionsIcones.map((opt) => (
+                            <button
+                                key={opt.id}
+                                onClick={() => changerIcone(opt.id)}
+                                style={{
+                                    background: iconeActive === opt.id ? 'rgba(46, 204, 113, 0.2)' : 'rgba(0, 0, 0, 0.4)',
+                                    border: iconeActive === opt.id ? '1px solid #2ecc71' : '1px solid rgba(255, 255, 255, 0.1)',
+                                    borderRadius: '12px',
+                                    padding: '12px 5px',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    alignItems: 'center',
+                                    gap: '8px',
+                                    transition: 'all 0.2s ease',
+                                    boxShadow: iconeActive === opt.id ? '0 0 10px rgba(46, 204, 113, 0.3)' : 'none'
+                                }}
+                            >
+                                {/* On affiche un emoji en attendant que tu mettes tes vrais PNG, mais le système est prêt ! */}
+                                <div style={{ fontSize: '24px' }}>{opt.emoji}</div>
+                                <span style={{ fontSize: '11px', fontWeight: iconeActive === opt.id ? 'bold' : 'normal' }}>
+                                    {opt.nom}
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                {/* AUTRES PARAMÈTRES (Squelettes) */}
+                <div style={{ background: 'rgba(255, 255, 255, 0.05)', borderRadius: '16px', padding: '15px', border: '1px solid rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(15px)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', color: 'white', fontWeight: 'bold', fontSize: '16px', marginBottom: '15px', paddingBottom: '10px', borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                        <Settings size={20} color="#95a5a6" /> Système
+                    </div>
+
+                    <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '13px', textAlign: 'center', padding: '20px 0' }}>
+                        Version de l'OS : 2.0<br/>
+                        Mise à jour à jour.
                     </div>
                 </div>
 
