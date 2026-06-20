@@ -191,26 +191,7 @@ body {
   flex-direction: column; /* Permet d'empiler le header et le contenu */
 }
 
-/* L'en-tête des applications (Titre rouge) */
-.app-page {
-  background-color: var(--app-bg);
-}
 
-.app-header, .gta-contacts-header {
-  background: linear-gradient(to bottom, #bd1c1c, #8b0000);
-  padding: 12px 15px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  flex-shrink: 0;
-}
-
-.app-header h2, .gta-contacts-header h2 {
-  font-size: 18px;
-  color: white;
-  margin: 0;
-}
 
 /* LE CONTENU QUI SCROLL */
 .app-content {
