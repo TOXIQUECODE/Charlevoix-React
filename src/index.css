@@ -292,7 +292,7 @@ body {
 }
 
 .gta-widget {
-  margin: 8px 40px !important;
+  margin: 30px 40px !important;
   padding: 12px 15px !important;
   background: rgba(143, 155, 166, 0.75) !important;
   backdrop-filter: blur(12px);
