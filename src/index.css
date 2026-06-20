@@ -45,10 +45,9 @@
 .grid-background {
   position: fixed;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  z-index: -1;
+  z-index: -10; /* Derrière tout le reste */
   background-color: #050505;
-  /* Grille de points avec effet néon */
-  background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 1.5px, transparent 1.5px);
+  background-image: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px);
   background-size: 35px 35px;
   animation: infinite-grid 20s linear infinite;
 }
@@ -64,7 +63,7 @@
 
 @keyframes infinite-grid {
   0% { background-position: 0px 0px; }
-  100% { background-position: 35px 35px; } /* Glissement parfait sans coupure */
+  100% { background-position: 35px 35px; }
 }
 
 /* =========================================
@@ -94,7 +93,8 @@ body {
   max-width: 400px;
   height: 85vh;
   max-height: 850px;
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(8px);
   border-radius: 45px;
   border: 8px solid #111;
   box-shadow: 0 30px 60px rgba(0,0,0,0.8);
@@ -106,11 +106,11 @@ body {
 
 /* L'ÉCRAN NOIR EN DESSOUS DES APPS */
 .gta-screen {
+  background: transparent !important;
   flex: 1;
-  min-height: 0; /* Empêche le débordement */
+  min-height: 0;
   position: relative;
   overflow: hidden;
-  background: #000;
   display: flex;
   flex-direction: column;
 }
@@ -118,35 +118,33 @@ body {
 /* LE BOUTON HOME */
 .home-btn {
   position: absolute;
-  bottom: 15px; /* Décolle le bouton du bas de la coque */
-  left: 50%; /* Pousse au milieu */
-  transform: translateX(-50%); /* Centre parfaitement sur son propre axe */
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%); /* Le secret du centrage parfait */
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 2px solid #333;
-  background: #111;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(15, 15, 15, 0.8);
+  backdrop-filter: blur(10px);
   cursor: pointer;
-  transition: all 0.2s ease;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 2px 5px rgba(0,0,0,0.5);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.5);
   overflow: hidden;
-  z-index: 1000; /* Assure qu'il passe au-dessus de l'écran */
+  z-index: 1000;
+  transition: transform 0.2s ease;
 }
 
 .home-btn:active {
-  background: #222;
-  transform: translateX(-50%) scale(0.95); /* Garde le centrage pendant l'animation */
+  transform: translateX(-50%) scale(0.95);
 }
 
 .home-btn-image {
   width: 60%;
   height: 60%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 3px rgba(255,255,255,0.2));
-  transition: transform 0.3s ease;
 }
 
 /* =========================================
