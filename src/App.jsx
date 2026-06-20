@@ -12,6 +12,9 @@ import ReglagesScreen from './components/ReglagesScreen';
 import NipScreen from './components/NipScreen';
 import WelcomeScreen from './components/WelcomeScreen';
 
+// 👇 L'IMPORT DU VORTEX ICI
+import { Vortex } from './ui/vortex';
+
 export default function App() {
     // ==========================================
     // 1. LES ÉTATS (LA MÉMOIRE DU TÉLÉPHONE)
@@ -60,13 +63,17 @@ export default function App() {
     };
 
     // ==========================================
-    // 4. LE RENDU VISUEL (LE TÉLÉPHONE)
+    // 4. LE RENDU VISUEL (LE TÉLÉPHONE ENVELOPPÉ DANS LE VORTEX)
     // ==========================================
     return (
-        <>
-            {/* LE FOND ANIMÉ AVEC LES POINTS ILLUMINÉS */}
-            <div className="grid-background"></div>
-
+        /* LE VORTEX REMPLACE LE "<>" ET L'ANCIEN FOND */
+        <Vortex
+            backgroundColor="black"
+            rangeY={800}
+            particleCount={500}
+            baseHue={120} /* 120 = Vert. Modifie cette valeur pour d'autres couleurs ! */
+            className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center overflow-hidden"
+        >
             {/* L'ÉCRAN D'ACCUEIL GLOBAL (HORS TÉLÉPHONE) */}
             <WelcomeScreen />
 
@@ -95,6 +102,6 @@ export default function App() {
                     />
                 </button>
             </div>
-        </>
+        </Vortex>
     );
 }
