@@ -57,7 +57,7 @@ export default function App() {
             <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -10, pointerEvents: 'none', background: '#050505' }}>
                 <Vortex
                     backgroundColor="transparent"
-                    rangeY={1280}
+                    rangeY={400}
                     particleCount={1000}
                     baseHue={220} /* Change ici pour la couleur */
                 />
