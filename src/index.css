@@ -207,7 +207,7 @@ body {
 ========================================= */
 .gta-home-bg {
   /* Un beau dégradé sombre et bleuté style "Midnight" d'Apple */
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+  background: transparent !important;
   display: flex;
   flex-direction: column;
   height: 100%;
