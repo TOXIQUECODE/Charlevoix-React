@@ -684,3 +684,36 @@ body {
   z-index: 2;
   backdrop-filter: blur(15px);
 }
+
+/* =========================================
+   TRANSPARENCE ABSOLUE DU TÉLÉPHONE
+   (FORCÉ TOUT EN BAS POUR ÉCRASER LE RESTE)
+========================================= */
+
+/* 1. La coque du téléphone (Le verre fumé) */
+.gta-phone {
+  background: rgba(10, 10, 10, 0.4) !important; /* 0.4 = Transparence. 0.1 = très transparent, 0.9 = très sombre */
+  backdrop-filter: blur(15px) !important;
+  -webkit-backdrop-filter: blur(15px) !important;
+}
+
+/* 2. L'écran principal et les fonds d'accueil (100% transparent) */
+.gta-screen,
+.gta-home-bg,
+.main-wrapper {
+  background: transparent !important;
+}
+
+/* 3. Les applications (Pêche, Cartes, etc.) */
+.app-page,
+.vue {
+  background: transparent !important;
+}
+
+/* 4. Les barres d'en-tête rouges (On les rend en verre aussi pour que ce soit harmonieux) */
+.app-header,
+.gta-contacts-header {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
