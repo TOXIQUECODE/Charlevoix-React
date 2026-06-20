@@ -237,6 +237,8 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 15px 10px !important;
   padding: 30px 20px 5px !important;
+  margin-top: 30px; !important;
+  background-color: black !important;
 }
 
 .app-icon-wrapper {
@@ -290,7 +292,7 @@ body {
 }
 
 .gta-widget {
-  margin: 8px 20px !important;
+  margin: 8px 40px !important;
   padding: 12px 15px !important;
   background: rgba(143, 155, 166, 0.75) !important;
   backdrop-filter: blur(12px);
