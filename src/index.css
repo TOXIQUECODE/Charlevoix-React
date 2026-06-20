@@ -117,6 +117,10 @@ body {
 
 /* LE BOUTON HOME */
 .home-btn {
+  position: absolute;
+  bottom: 15px; /* Décolle le bouton du bas de la coque */
+  left: 50%; /* Pousse au milieu */
+  transform: translateX(-50%); /* Centre parfaitement sur son propre axe */
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -128,19 +132,20 @@ body {
   justify-content: center;
   align-items: center;
   box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 2px 5px rgba(0,0,0,0.5);
-  overflow: hidden; /* Empêche l'image de dépasser */
+  overflow: hidden;
+  z-index: 1000; /* Assure qu'il passe au-dessus de l'écran */
 }
 
 .home-btn:active {
   background: #222;
-  transform: scale(0.95);
+  transform: translateX(-50%) scale(0.95); /* Garde le centrage pendant l'animation */
 }
 
 .home-btn-image {
-  width: 60%; /* Laisse une belle marge (ne touche pas les bords) */
+  width: 60%;
   height: 60%;
-  object-fit: contain; /* Garde les proportions de tes PNG */
-  filter: drop-shadow(0 2px 3px rgba(255,255,255,0.2)); /* Petit effet de lumière */
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgba(255,255,255,0.2));
   transition: transform 0.3s ease;
 }
 
@@ -155,9 +160,12 @@ body {
   font-size: 13px;
   font-weight: bold;
   color: white;
-  background: #000;
+  background: transparent; /* Permet au fond d'écran de passer en dessous */
   position: absolute;
-  top: 0; left: 0; width: 100%;
+  top: 10px; /* Décolle très légèrement du haut de la coque */
+  left: 0;
+  width: 100%;
+  box-sizing: border-box; /* Empêche le padding de faire déborder la largeur */
   z-index: 100;
 }
 .status-left, .status-center, .status-right { flex: 1; }
