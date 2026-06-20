@@ -48,51 +48,49 @@ export default function App() {
         );
     };
 
+    // ==========================================
+    // 4. LE RENDU VISUEL (MÉTHODE INDESTRUCTIBLE)
+    // ==========================================
     return (
-        /* Le grand conteneur noir qui prend tout l'écran */
-        <div className="relative w-full h-screen overflow-hidden bg-black flex items-center justify-center">
-
-            {/* 1. LE FOND VORTEX (Fixé tout au fond de l'écran) */}
-            <div className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+        <>
+            {/* 1. LE FOND VORTEX (Forcé en arrière-plan total, sans bloquer les clics) */}
+            <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -10, pointerEvents: 'none', background: '#050505' }}>
                 <Vortex
                     backgroundColor="transparent"
                     rangeY={800}
                     particleCount={500}
-                    baseHue={120}
+                    baseHue={120} /* Change ici pour la couleur */
                 />
             </div>
 
-            {/* 2. LE TÉLÉPHONE (Par-dessus le Vortex, bien centré) */}
-            <div className="relative z-10 w-full h-full flex items-center justify-center">
+            {/* 2. L'ÉCRAN D'ACCUEIL GLOBAL */}
+            <WelcomeScreen />
 
-                <WelcomeScreen />
-
-                <div className="gta-phone" id="ifruit-app">
-                    <div className="gta-screen">
-                        <StatusBar />
-                        {gererNavigation()}
-                    </div>
-
-                    <button
-                        className="home-btn"
-                        onClick={() => {
-                            setPageActive('accueil');
-                            window.dispatchEvent(new Event('retourHome'));
-                        }}
-                    >
-                        <img
-                            src={`/${homeIcon}.png`}
-                            alt="Bouton Home"
-                            className="home-btn-image"
-                            onError={(e) => {
-                                console.error("Image non trouvée :", e.target.src);
-                                e.target.style.display = 'none';
-                            }}
-                        />
-                    </button>
+            {/* 3. LE TÉLÉPHONE (Directement géré par ton #root CSS qui le centre parfaitement) */}
+            <div className="gta-phone" id="ifruit-app">
+                <div className="gta-screen">
+                    <StatusBar />
+                    {gererNavigation()}
                 </div>
 
+                <button
+                    className="home-btn"
+                    onClick={() => {
+                        setPageActive('accueil');
+                        window.dispatchEvent(new Event('retourHome'));
+                    }}
+                >
+                    <img
+                        src={`/${homeIcon}.png`}
+                        alt="Bouton Home"
+                        className="home-btn-image"
+                        onError={(e) => {
+                            console.error("Image non trouvée :", e.target.src);
+                            e.target.style.display = 'none';
+                        }}
+                    />
+                </button>
             </div>
-        </div>
+        </>
     );
 }
