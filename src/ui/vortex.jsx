@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { cn } from "../utils/utils";
+// LE SECRET DU VRAI VORTEX EST ICI 👇
+import { createNoise3D } from "simplex-noise";
 
 export const Vortex = (props) => {
     const canvasRef = useRef(null);
@@ -24,7 +26,8 @@ export const Vortex = (props) => {
     const backgroundColor = props.backgroundColor || "#000000";
 
     let tick = 0;
-    const noise3D = noise(canvasRef);
+    // On utilise la VRAIE turbulence organique !
+    const noise3D = createNoise3D();
     let particleProps = new Float32Array(particlePropsLength);
     let center = [0, 0];
 
@@ -174,11 +177,3 @@ export const Vortex = (props) => {
         </div>
     );
 };
-
-// Simple pseudo-noise function for standalone usage
-function noise(ref) {
-    let z = 0;
-    return (x, y, zParam) => {
-        return Math.sin(x * 0.05 + zParam) * Math.cos(y * 0.05 + zParam);
-    };
-}
