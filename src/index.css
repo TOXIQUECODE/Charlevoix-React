@@ -508,6 +508,7 @@ body {
   flex-direction: column;
   /* On s'assure qu'il n'y a pas de marges invisibles qui cassent le centrage */
   margin: 0;
+  background-color: transparent !important;
 }
 
 /* =========================================
