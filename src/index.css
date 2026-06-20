@@ -1,8 +1,6 @@
 /* =========================================
    TYPOGRAPHIE PREMIUM & ANIMATIONS
 ========================================= */
-/* Importation de la police "Inter" de Google (Style iOS/Apple pur) */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Vibur');
 
@@ -13,40 +11,13 @@
   font-style: normal;
 }
 
-
 @keyframes zoomIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* L'animation ultra-réaliste du tube néon */
-@keyframes neon-flicker {
-  0%, 18%, 22%, 25%, 53%, 57%, 100% {
-    text-shadow:
-            0 0 5px #afffff,
-            0 0 10px #afffff,
-            0 0 20px #7db2b2,
-            0 0 40px #7db2b2,
-            0 0 80px #7db2b2,
-            0 0 100px #7db2b2;
-    opacity: 1;
-  }
-  20%, 24%, 55% {
-    text-shadow: none;
-    opacity: 0.4;
-  }
-}
-
 :root {
-  /* On remet Inter pour le reste de l'interface du téléphone */
   --font-stack: "Inter", -apple-system, sans-serif;
-}
-
-/* Le halo de lumière qui donne la profondeur */
-
-@keyframes infinite-grid {
-  0% { background-position: 0px 0px; }
-  100% { background-position: 35px 35px; }
 }
 
 /* =========================================
@@ -58,7 +29,6 @@ body {
   padding: 0;
 }
 
-/* LA BOÎTE REACT (Prend tout l'écran) */
 #root {
   width: 100%;
   height: 100vh;
@@ -69,15 +39,17 @@ body {
 }
 
 /* =========================================
-   LA COQUE DU TÉLÉPHONE
+   LA COQUE DU TÉLÉPHONE (LE VERRE FUMÉ LÉGER)
 ========================================= */
 .gta-phone {
   width: 100%;
   max-width: 400px;
   height: 85vh;
   max-height: 850px;
-  background-color: transparent !important;
-  backdrop-filter: blur(8px);
+  /* Verre léger, élégant et fondu */
+  background: rgba(10, 10, 10, 0.3) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   border-radius: 45px;
   border: 8px solid #111;
   box-shadow: 0 30px 60px rgba(0,0,0,0.8);
@@ -87,8 +59,8 @@ body {
   overflow: hidden;
 }
 
-/* L'ÉCRAN NOIR EN DESSOUS DES APPS */
-.gta-screen {
+/* L'ÉCRAN (Doit être 100% transparent pour voir le Vortex) */
+.gta-screen, .main-wrapper, .gta-home-bg, .app-page, .vue {
   background: transparent !important;
   flex: 1;
   min-height: 0;
@@ -98,17 +70,60 @@ body {
   flex-direction: column;
 }
 
-/* LE BOUTON HOME */
+.vue { display: none; padding-top: 25px; width: 100%; height: 100%; }
+.vue.active { display: flex; animation: zoomIn 0.2s ease-out; }
+
+/* =========================================
+   BARRES (HEADER / STATUS)
+========================================= */
+.status-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 20px;
+  font-size: 13px;
+  font-weight: bold;
+  color: white;
+  background: transparent;
+  position: absolute;
+  top: 10px;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 100;
+}
+.status-left, .status-center, .status-right { flex: 1; }
+.status-center { text-align: center; display: flex; justify-content: center; gap: 5px; }
+.status-right { text-align: right; }
+.status-left { text-align: left; display: flex; align-items: center; }
+
+.app-header, .gta-contacts-header {
+  background: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 12px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  flex-shrink: 0;
+}
+.app-header h2, .gta-contacts-header h2 { font-size: 18px; color: white; margin: 0; }
+.app-content { padding: 15px; flex: 1; overflow-y: auto; color: white; }
+
+/* =========================================
+   BOUTON HOME
+========================================= */
 .home-btn {
   position: absolute;
   bottom: 15px;
   left: 50%;
-  transform: translateX(-50%); /* Le secret du centrage parfait */
+  transform: translateX(-50%);
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  background: rgba(15, 15, 15, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(15, 15, 15, 0.6);
   backdrop-filter: blur(10px);
   cursor: pointer;
   display: flex;
@@ -119,83 +134,18 @@ body {
   z-index: 1000;
   transition: transform 0.2s ease;
 }
-
-.home-btn:active {
-  transform: translateX(-50%) scale(0.95);
-}
-
-.home-btn-image {
-  width: 60%;
-  height: 60%;
-  object-fit: contain;
-}
+.home-btn:active { transform: translateX(-50%) scale(0.95); }
+.home-btn-image { width: 60%; height: 60%; object-fit: contain; }
 
 /* =========================================
-   LA BARRE D'ÉTAT (Heure, LTE)
+   GRILLE D'ACCUEIL & ICÔNES
 ========================================= */
-.status-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 20px;
-  font-size: 13px;
-  font-weight: bold;
-  color: white;
-  background: transparent; /* Permet au fond d'écran de passer en dessous */
-  position: absolute;
-  top: 10px; /* Décolle très légèrement du haut de la coque */
-  left: 0;
-  width: 100%;
-  box-sizing: border-box; /* Empêche le padding de faire déborder la largeur */
-  z-index: 100;
-}
-.status-left, .status-center, .status-right { flex: 1; }
-.status-center { text-align: center; display: flex; justify-content: center; gap: 5px; }
-.status-right { text-align: right; }
-.status-left { text-align: left; display: flex; align-items: center; }
-
-
-/* =========================================
-   VUES & CONTENUS
-========================================= */
-.vue {
-  display: none;
-  width: 100%;
-  height: 100%;
-  padding-top: 25px;
-}
-
-.vue.active {
-  display: flex;
-  animation: zoomIn 0.2s ease-out;
-  flex: 1;
-  min-height: 0;
-  width: 100%;
-  flex-direction: column; /* Permet d'empiler le header et le contenu */
-}
-
-
-
-/* LE CONTENU QUI SCROLL */
-.app-content {
-  padding: 15px;
-  flex: 1;
-  overflow-y: auto; /* C'est ici que ça scroll ! */
-  min-height: 0;
-  color: #111;
-}
-
-/* =========================================
-   ACCUEIL & ICÔNES
-========================================= */
-
 .app-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 15px 10px !important;
   padding: 30px 20px 5px !important;
   margin-top: 30px !important;
-  /* LE COUPABLE ÉTAIT ICI : On remplace "black" par "transparent" */
   background-color: transparent !important;
 }
 
@@ -206,183 +156,91 @@ body {
   gap: 8px;
 }
 
-/* =========================================
-   ICÔNES (Style Glassmorphism Final)
-========================================= */
-
-/* Le texte net devant */
-
-/* Le flou derrière qui crée la lueur colorée */
-
 .app-name {
-  color: rgb(255 255 255);
-  /* ON AJOUTE LA NOUVELLE POLICE ICI */
+  color: white;
   font-family: 'DroplineRegular', sans-serif;
-  font-size: 18px; /* J'ai légèrement augmenté la taille car les polices custom s'affichent souvent plus petites */
+  font-size: 18px;
   font-weight: 600;
   text-align: center;
-  letter-spacing: 0.5px; /* Un petit espacement pour la lisibilité */
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8); /* Une petite ombre pour qu'on lise bien sur le fond */
-}
-
-/* =========================================
-   COMPOSANTS SPÉCIFIQUES (Contacts, Galerie, Recettes)
-========================================= */
-.loading { color: #555; text-align: center; margin-top: 20px; font-size: 14px; }
-
-/* Contacts & Clavier */
-
-/* Recettes & ACM */
-
-/* Réglages & Dev */
-
-/* Galerie & Slider */
-
-/* =========================================
-   MOBILE RESPONSIVE
-========================================= */
-/* =========================================
-   MOBILE RESPONSIVE (Plein écran absolu)
-========================================= */
-/* =========================================
-   MOBILE RESPONSIVE (Avec coque visible)
-========================================= */
-@media screen and (max-width: 450px) {
-  body { padding: 0; background: #000; }
-  #root { padding: 0; }
-  .gta-phone {
-    background-color:transparent;
-    /* 15px de chaque côté = 30px à retirer de la largeur totale */
-    width: calc(100% - 30px);
-    /* 15px en haut + 25px en bas = 40px à retirer de la hauteur totale */
-    height: calc(100dvh - 40px);
-    /* Marges : Haut(15px) Droite(15px) Bas(25px) Gauche(15px) */
-    margin: 15px 15px 25px 15px;
-    max-height: none;
-
-    /* On réactive le design de la coque */
-    border-radius: 35px;
-    border: 6px solid #111;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.8);
-  }
-}
-/* =========================================
-   ÉCRAN DE BIENVENUE (Minimaliste / Clic Global)
-========================================= */
-.welcome-container {
-  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: #112 url('https://images.weserv.nl/?url=i.imgur.com/6QJjYMe.jpg') center no-repeat;
-  background-size: cover;
-  display: flex; justify-content: center; align-items: center;
-  z-index: 999999;
-
-  /* Indique à l'utilisateur que TOUT l'écran est un bouton */
-  cursor: pointer;
-  /* L'effet de transition 3D (disparition et zoom) */
-  transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-.welcome-container.hidden {
-  opacity: 0;
-  pointer-events: none;
-  /* L'écran zoome vers l'utilisateur avant de disparaître */
-  transform: scale(1.5);
-}
-
-.welcome-content {
-  text-align: center;
-  color: white;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* LE TITRE NÉON VIBUR SUR H1 */
-/* LE TITRE NÉON (Couleur Flamme/Orange) */
-.welcome-title {
-  font-family: "Vibur", cursive !important;
-  font-weight: 400;
-  font-size: clamp(50px, 15vw, 90px);
-  color: #fff2e6; /* Un blanc très légèrement orangé pour le tube de verre */
-  margin-bottom: 10px;
-  user-select: none;
-
-  /* Les ombres portées qui créent la lumière de feu */
-  text-shadow:
-          0 -40px 100px,
-          0 0 2px,
-          0 0 1em #ff5722,   /* Le cœur rouge/orange ardent de la flamme */
-          0 0 0.5em #ff5722, /* Le halo intense */
-          0 0 0.1em #ffb347, /* La bordure pêche plus douce */
-          0 10px 3px #000;   /* L'ombre sous le tube */
-}
-
-/* Le grésillement du néon sur les lettres spécifiques */
-.welcome-title span {
-  animation: blink linear infinite 2s;
-}
-.welcome-title span:nth-of-type(2) {
-  animation: blink linear infinite 3s;
-}
-
-@keyframes blink {
-  78% { color: inherit; text-shadow: inherit; }
-  79% { color: #333; }
-  80% { text-shadow: none; }
-  81% { color: inherit; text-shadow: inherit; }
-  82% { color: #333; text-shadow: none; }
-  83% { color: inherit; text-shadow: inherit; }
-  92% { color: #333; text-shadow: none; }
-  92.5% { color: inherit; text-shadow: inherit; }
-}
-
-/* LE SOUS-TITRE (Effet chaleur fluide) */
-.welcome-text {
-  font-family: "Inter", sans-serif;
-  font-size: 16px;
-  font-weight: 500;
   letter-spacing: 0.5px;
-  display: inline-block;
-
-  /* Variables de la chaleur */
-  --offset: 6ch;
-  --angle: 110deg;
-  --base-color: #555555;
-
-  background:
-          linear-gradient(
-                  var(--angle),
-                  transparent calc(50% - var(--offset)),
-                  #ffb347 calc(50% - 2ch),
-                  #ff5722 50%,
-                  #ffb347 calc(50% + 2ch),
-                  transparent calc(50% + var(--offset))
-          ) 0 0 / 300% 100% no-repeat border-box,
-          linear-gradient(var(--base-color), var(--base-color)) padding-box;
-
-  color: transparent;
-  background-clip: text;
-  -webkit-background-clip: text;
-
-  /* "linear" permet un balayage continu sans pause */
-  animation: text-shimmer 3s infinite alternate linear;
-}
-
-@keyframes text-shimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: 0% 0; }
-}
-
-.main-wrapper {
-  display: flex;
-  flex-direction: column;
-  flex: 1; /* Force le conteneur à prendre tout l'espace restant */
-  height: 100%;
-  width: 100%;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
 /* =========================================
-   SYSTÈME DE SWIPE (PAGES DE L'ACCUEIL)
+   BORDURES ÉLECTRIQUES (ICÔNES ET CARTES)
+========================================= */
+
+/* 1. L'enveloppe des icônes (C'est elle qui manquait et créait le radar !) */
+.electric-icon-wrapper {
+  position: relative;
+  padding: 2px;
+  border-radius: 26px; /* Arrondi iOS */
+  overflow: hidden; /* CRUCIAL : Enferme le faisceau dans l'icône */
+  box-shadow: 0 0 10px var(--electric-color), inset 0 0 5px rgba(255,255,255,0.1);
+  z-index: 1;
+  transition: transform 0.2s ease;
+}
+.electric-icon-wrapper:active { transform: scale(0.92); }
+
+/* Le fond des icônes (Verre fumé) */
+.electric-icon-inner {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  background: rgba(20, 20, 20, 0.4); /* Opacité ajustée pour être jolie */
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+}
+
+/* 2. L'enveloppe des cartes (Météo, Chalet) */
+.electric-card-wrapper {
+  position: relative;
+  padding: 2px;
+  border-radius: 16px;
+  overflow: hidden; /* CRUCIAL */
+  margin-bottom: 15px;
+  box-shadow: 0 0 15px var(--electric-color), inset 0 0 10px rgba(255,255,255,0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  z-index: 1;
+}
+.electric-card-wrapper:active { transform: scale(0.97); }
+
+/* Le fond des cartes */
+.electric-card-inner {
+  position: relative;
+  background: rgba(20, 20, 20, 0.4);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+}
+
+/* Le faisceau d'énergie rotatif partagé */
+.electric-icon-wrapper::before,
+.electric-card-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: conic-gradient(transparent, var(--electric-color), transparent 30%);
+  animation: spin 3s linear infinite, flicker 0.15s infinite alternate;
+  z-index: -1;
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes flicker {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; filter: brightness(1.2); }
+}
+
+/* =========================================
+   COMPOSANTS SPÉCIFIQUES & SWIPE
 ========================================= */
 .home-slider {
   display: flex;
@@ -390,217 +248,71 @@ body {
   flex: 1;
   overflow-x: auto;
   overflow-y: hidden;
-  scroll-snap-type: x mandatory; /* Le magnétisme strict horizontal */
-  -webkit-overflow-scrolling: touch; /* Indispensable pour la fluidité sur iPhone/Android */
-  scrollbar-width: none; /* Cache la barre Firefox */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
-.home-slider::-webkit-scrollbar {
-  display: none; /* Cache la barre Chrome/Safari */
-}
-
+.home-slider::-webkit-scrollbar { display: none; }
 .home-page {
-  flex: 0 0 100%; /* Force la page à faire 100% exact de la largeur, sans s'écraser */
+  flex: 0 0 100%;
   width: 100%;
-  scroll-snap-align: center; /* Verrouille la page parfaitement au milieu */
-  scroll-snap-stop: always; /* Force le slider à s'arrêter page par page */
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
   display: flex;
   flex-direction: column;
-  /* On s'assure qu'il n'y a pas de marges invisibles qui cassent le centrage */
   margin: 0;
-  background-color: transparent !important;
 }
-
-/* =========================================
-   LES PETITS POINTS DE NAVIGATION (iPHONE STYLE)
-========================================= */
 .pagination-dots {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8px;
   height: 50px;
-  padding-bottom: 10px; /* Espace avec le bas de l'écran */
+  padding-bottom: 10px;
   flex-shrink: 0;
 }
-
-.pagination-dots .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3); /* Point éteint (transparent) */
-  transition: all 0.3s ease;
-}
-
-.pagination-dots .dot.active {
-  background: rgba(255, 255, 255, 0.9); /* Point allumé (blanc pur) */
-  transform: scale(1.3); /* Le point actif grossit légèrement */
-}
+.pagination-dots .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transition: all 0.3s ease; }
+.pagination-dots .dot.active { background: rgba(255, 255, 255, 0.9); transform: scale(1.3); }
 
 /* =========================================
-   CARTES DE LISTE (Activités, Magasins, Pêche...)
+   ÉCRAN DE BIENVENUE
 ========================================= */
-
-/* L'espace pour l'image à gauche */
-.glass-card-image-placeholder {
-  width: 55px;
-  height: 55px;
-  border-radius: 12px;
-  background: rgba(0, 0, 0, 0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-right: 15px;
-  flex-shrink: 0;
-  box-shadow: inset 0 2px 5px rgba(0,0,0,0.6);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-/* Conteneur du texte */
-.glass-card-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px; /* Espace entre les deux lignes */
-}
-
-/* Les lignes de texte "Fantômes" */
-
-/* La petite flèche à droite */
-.glass-card-arrow {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-left: 10px;
-  opacity: 0.4;
-}
-
-
-/* =========================================
-   BORDURES ÉLECTRIQUES ANIMÉES
-========================================= */
-.electric-card-wrapper {
-  position: relative;
-  /* L'épaisseur de la bordure électrique */
-  padding: 2px;
-  border-radius: 16px;
-  overflow: hidden;
-  margin-bottom: 15px;
-  /* Le halo extérieur qui brille selon la couleur choisie */
-  box-shadow: 0 0 15px var(--electric-color), inset 0 0 10px rgba(255,255,255,0.1);
-  transition: transform 0.2s ease;
+.welcome-container {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: #112 url('https://images.weserv.nl/?url=i.imgur.com/6QJjYMe.jpg') center no-repeat;
+  background-size: cover;
+  display: flex; justify-content: center; align-items: center;
+  z-index: 999999;
   cursor: pointer;
-  z-index: 1;
+  transition: opacity 0.8s ease-in-out, transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
 }
-
-.electric-card-wrapper:active {
-  transform: scale(0.97);
+.welcome-container.hidden { opacity: 0; pointer-events: none; transform: scale(1.5); }
+.welcome-content { text-align: center; color: white; display: flex; flex-direction: column; align-items: center; }
+.welcome-title {
+  font-family: "Vibur", cursive !important; font-weight: 400; font-size: clamp(50px, 15vw, 90px); color: #fff2e6; margin-bottom: 10px;
+  text-shadow: 0 -40px 100px, 0 0 2px, 0 0 1em #ff5722, 0 0 0.5em #ff5722, 0 0 0.1em #ffb347, 0 10px 3px #000;
 }
-
-/* Le faisceau d'énergie qui tourne en arrière-plan */
-.electric-card-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%; width: 200%; height: 200%;
-  /* Un faisceau qui passe de transparent à la couleur électrique */
-  background: conic-gradient(transparent, var(--electric-color), transparent 30%);
-  /* Animation : Rotation + Clignotement électrique */
-  animation: spin 3s linear infinite, flicker 0.15s infinite alternate;
-  z-index: -1;
+.welcome-text {
+  font-family: "Inter", sans-serif; font-size: 16px; font-weight: 500; letter-spacing: 0.5px; display: inline-block;
+  --offset: 6ch; --angle: 110deg; --base-color: #555555;
+  background: linear-gradient(var(--angle), transparent calc(50% - var(--offset)), #ffb347 calc(50% - 2ch), #ff5722 50%, #ffb347 calc(50% + 2ch), transparent calc(50% + var(--offset))) 0 0 / 300% 100% no-repeat border-box, linear-gradient(var(--base-color), var(--base-color)) padding-box;
+  color: transparent; background-clip: text; -webkit-background-clip: text;
+  animation: text-shimmer 3s infinite alternate linear;
 }
-
-/* Le cœur de la carte (En verre fumé noir) */
-.electric-card-inner {
-  position: relative;
-  /* On passe de 0.9 à 0.4 ici aussi */
-  background: rgba(15, 15, 15, 0.4);
-  border-radius: 14px;
-  padding: 12px;
-  display: flex;
-  align-items: center;
-  z-index: 2;
-  backdrop-filter: blur(15px);
-}
-
-/* Les animations */
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-@keyframes flicker {
-  0% { opacity: 0.7; }
-  100% { opacity: 1; filter: brightness(1.2); }
-}
-/* =========================================
-   BORDURES ÉLECTRIQUES POUR LES ICÔNES (ACCUEIL)
-========================================= */
-.electric-icon-inner {
-  position: relative;
-  width: 62px;
-  height: 62px;
-  /* On passe de 0.85 à 0.4 pour un effet verre fumé */
-  background: rgba(15, 15, 15, 0.4);
-  border-radius: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  backdrop-filter: blur(15px);
-}
-
-.electric-icon-wrapper:active {
-  transform: scale(0.92);
-}
-
-/* Le faisceau qui tourne */
-.electric-icon-wrapper::before {
-  content: '';
-  position: absolute;
-  top: -50%; left: -50%; width: 200%; height: 200%;
-  background: conic-gradient(transparent, var(--electric-color), transparent 30%);
-  animation: spin 3s linear infinite, flicker 0.15s infinite alternate;
-  z-index: -1;
-}
-
-/* Le fond noir de l'icône */
-.electric-icon-inner {
-  position: relative;
-  width: 62px;
-  height: 62px;
-  background: transparent;
-  border-radius: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  backdrop-filter: blur(15px);
-}
+@keyframes text-shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0% 0; } }
 
 /* =========================================
-   TRANSPARENCE ABSOLUE DU TÉLÉPHONE
-   (FORCÉ TOUT EN BAS POUR ÉCRASER LE RESTE)
+   MOBILE RESPONSIVE
 ========================================= */
-
-/* 1. La coque du téléphone (Le verre fumé) */
-.gta-phone {
-  background: rgba(10, 10, 10, 0.4) !important; /* 0.4 = Transparence. 0.1 = très transparent, 0.9 = très sombre */
-  backdrop-filter: blur(15px) !important;
-  -webkit-backdrop-filter: blur(15px) !important;
-}
-
-/* 2. L'écran principal et les fonds d'accueil (100% transparent) */
-.gta-screen,
-.main-wrapper {
-  background: transparent !important;
-}
-
-/* 3. Les applications (Pêche, Cartes, etc.) */
-.app-page,
-.vue {
-  background: transparent !important;
-}
-
-/* 4. Les barres d'en-tête rouges (On les rend en verre aussi pour que ce soit harmonieux) */
-.app-header {
-  background: rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(10px) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+@media screen and (max-width: 450px) {
+  body { padding: 0; background: #000; }
+  #root { padding: 0; }
+  .gta-phone {
+    width: calc(100% - 30px);
+    height: calc(100dvh - 40px);
+    margin: 15px;
+    max-height: none;
+    border-radius: 35px;
+    border: 6px solid #111;
+  }
 }
