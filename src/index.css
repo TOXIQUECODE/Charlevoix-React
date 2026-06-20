@@ -599,3 +599,58 @@ body {
   padding-left: 10px;
   opacity: 0.4;
 }
+
+
+/* =========================================
+   BORDURES ÉLECTRIQUES ANIMÉES
+========================================= */
+.electric-card-wrapper {
+  position: relative;
+  /* L'épaisseur de la bordure électrique */
+  padding: 2px;
+  border-radius: 16px;
+  overflow: hidden;
+  margin-bottom: 15px;
+  /* Le halo extérieur qui brille selon la couleur choisie */
+  box-shadow: 0 0 15px var(--electric-color), inset 0 0 10px rgba(255,255,255,0.1);
+  transition: transform 0.2s ease;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.electric-card-wrapper:active {
+  transform: scale(0.97);
+}
+
+/* Le faisceau d'énergie qui tourne en arrière-plan */
+.electric-card-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  /* Un faisceau qui passe de transparent à la couleur électrique */
+  background: conic-gradient(transparent, var(--electric-color), transparent 30%);
+  /* Animation : Rotation + Clignotement électrique */
+  animation: spin 3s linear infinite, flicker 0.15s infinite alternate;
+  z-index: -1;
+}
+
+/* Le cœur de la carte (En verre fumé noir) */
+.electric-card-inner {
+  position: relative;
+  background: rgba(15, 15, 15, 0.9); /* Noir profond presque opaque */
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  z-index: 2; /* Reste au-dessus du faisceau */
+  backdrop-filter: blur(15px);
+}
+
+/* Les animations */
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+@keyframes flicker {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; filter: brightness(1.2); }
+}
