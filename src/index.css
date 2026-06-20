@@ -219,7 +219,7 @@ body {
   gap: 15px 10px !important;
   padding: 30px 20px 5px !important;
   margin-top: 30px !important;
-  background-color: black;
+  background-color: transparen !important;
 }
 
 .app-icon-wrapper {
@@ -627,7 +627,7 @@ body {
 /* Le cœur de la carte (En verre fumé noir) */
 .electric-card-inner {
   position: relative;
-  background: rgba(15, 15, 15, 0.9); /* Noir profond presque opaque */
+  background: transparent; /* Noir profond presque opaque */
   border-radius: 14px;
   padding: 12px;
   display: flex;
@@ -676,7 +676,7 @@ body {
   position: relative;
   width: 62px;
   height: 62px;
-  background: rgba(15, 15, 15, 0.85);
+  background: transparent;
   border-radius: 24px;
   display: flex;
   justify-content: center;
