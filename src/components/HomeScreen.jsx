@@ -1,13 +1,15 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import AppIcon from './AppIcon';
 import { supabase } from '../supabaseClient';
 import { TreePine, ShoppingBag, Map, Fish, Utensils, User, Camera, Settings, Rocket, Sun, CloudSun, Cloud, CloudRain, CloudLightning, Snowflake, Moon } from 'lucide-react';
 
 // ==============================================================
-// 1. LE COMPOSANT WIDGET METEO
+// 1. LE COMPOSANT WIDGET METEO (Maintenant Électrique !)
 // ==============================================================
 function WidgetMeteo({ onClick }) {
-    const [meteo, setMeteo] = useState({ temp: '--', condition: 'Chargement...', icon: <CloudSun size={26} color="#f1c40f" /> });
+    const [meteo, setMeteo] = useState({
+        temp: '--', condition: 'Chargement...', icon: <CloudSun size={26} color="#f1c40f" />, couleur: '#f1c40f'
+    });
 
     useEffect(() => {
         const url = "https://api.open-meteo.com/v1/forecast?latitude=47.44&longitude=-70.50&current=temperature_2m,is_day,weather_code&timezone=America%2FNew_York";
@@ -21,51 +23,52 @@ function WidgetMeteo({ onClick }) {
 
                 let conditionTexte = "Inconnu";
                 let IconeMeteo = <Cloud size={26} color="#bdc3c7" />;
+                let lueurCouleur = '#f1c40f'; // Jaune par défaut
 
                 if (code === 0) {
                     conditionTexte = "Dégagé";
                     IconeMeteo = isDay ? <Sun size={26} color="#f1c40f" /> : <Moon size={26} color="#f39c12" />;
+                    lueurCouleur = isDay ? '#f1c40f' : '#f39c12';
                 } else if (code === 1 || code === 2 || code === 3) {
                     conditionTexte = "Part. nuageux";
                     IconeMeteo = isDay ? <CloudSun size={26} color="#f1c40f" /> : <Cloud size={26} color="#bdc3c7" />;
+                    lueurCouleur = isDay ? '#f1c40f' : '#bdc3c7';
                 } else if (code >= 45 && code <= 48) {
                     conditionTexte = "Brouillard";
                     IconeMeteo = <Cloud size={26} color="#95a5a6" />;
+                    lueurCouleur = '#95a5a6';
                 } else if (code >= 51 && code <= 67) {
                     conditionTexte = "Pluie";
                     IconeMeteo = <CloudRain size={26} color="#3498db" />;
+                    lueurCouleur = '#3498db'; // Bleu électrique
                 } else if (code >= 71 && code <= 86) {
                     conditionTexte = "Neige";
                     IconeMeteo = <Snowflake size={26} color="#ecf0f1" />;
+                    lueurCouleur = '#ecf0f1';
                 } else if (code >= 95) {
                     conditionTexte = "Orages";
                     IconeMeteo = <CloudLightning size={26} color="#e74c3c" />;
+                    lueurCouleur = '#e74c3c'; // Rouge électrique
                 }
 
-                setMeteo({ temp, condition: conditionTexte, icon: IconeMeteo });
+                setMeteo({ temp, condition: conditionTexte, icon: IconeMeteo, couleur: lueurCouleur });
             })
             .catch(err => {
                 console.error("Erreur météo:", err);
-                setMeteo({ temp: '?', condition: 'Hors ligne', icon: <Cloud size={26} color="#e74c3c" /> });
             });
     }, []);
 
     return (
-        <div className="gta-widget" onClick={onClick} style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer' }}>
-            <div style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: '45px', height: '45px',
-                background: 'rgba(255, 255, 255, 0.1)', borderRadius: '12px'
-            }}>
-                {meteo.icon}
-            </div>
-
-            <div className="widget-info">
-                <div style={{ fontWeight: '600', fontSize: '15px', color: '#ffffff' }}>
-                    Météo Charlevoix ↗
+        <div className="electric-card-wrapper" onClick={onClick} style={{ '--electric-color': meteo.couleur, marginBottom: '15px' }}>
+            <div className="electric-card-inner" style={{ padding: '12px 15px', gap: '15px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', height: '45px', background: 'rgba(0,0,0,0.5)', borderRadius: '12px' }}>
+                    {meteo.icon}
                 </div>
-                <div style={{ fontSize: '13px', color: '#8ce99a', marginTop: '3px' }}>
-                    {meteo.temp}°C - {meteo.condition}
+                <div className="widget-info" style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 'bold', fontSize: '15px', color: 'white' }}>Météo Charlevoix ↗</div>
+                    <div style={{ fontSize: '13px', color: meteo.couleur, marginTop: '3px' }}>
+                        {meteo.temp}°C - {meteo.condition}
+                    </div>
                 </div>
             </div>
         </div>
@@ -73,26 +76,27 @@ function WidgetMeteo({ onClick }) {
 }
 
 // ==============================================================
-// 2. L'ÉCRAN D'ACCUEIL AVEC SWIPE (PAGE 1 & PAGE 2)
+// 2. L'ÉCRAN D'ACCUEIL AVEC SWIPE & APPLICATIONS ÉLECTRIQUES
 // ==============================================================
 export default function HomeScreen({ onOuvrirApp }) {
     const [chaletInfo, setChaletInfo] = useState("Recherche signal GPS...");
     const [activePage, setActivePage] = useState(0);
+    const sliderRef = useRef(null);
 
-    // Fonction pour détecter sur quelle page on se trouve
     const handleScroll = (e) => {
         const pageIndex = Math.round(e.target.scrollLeft / e.target.clientWidth);
         setActivePage(pageIndex);
     };
 
     useEffect(() => {
-        // Restaurer le fond d'écran
-        const savedBg = localStorage.getItem('ifruit-bg');
-        if (savedBg) {
-            document.querySelector('.gta-home-bg').style.background = savedBg;
-        }
+        const glisserVersPage1 = () => {
+            if (sliderRef.current) sliderRef.current.scrollTo({ left: 0, behavior: 'smooth' });
+        };
+        window.addEventListener('retourHome', glisserVersPage1);
+        return () => window.removeEventListener('retourHome', glisserVersPage1);
+    }, []);
 
-        // Logique du GPS
+    useEffect(() => {
         async function obtenirGPS() {
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(async (position) => {
@@ -115,12 +119,8 @@ export default function HomeScreen({ onOuvrirApp }) {
                         } catch (e) {
                             setChaletInfo("-- km | -- min");
                         }
-                    } else {
-                        setChaletInfo("Coordonnées chalet absentes");
                     }
-                }, () => {
-                    setChaletInfo("Accès GPS refusé");
-                });
+                }, () => setChaletInfo("Accès GPS refusé"));
             }
         }
         obtenirGPS();
@@ -128,60 +128,55 @@ export default function HomeScreen({ onOuvrirApp }) {
 
     return (
         <div className="main-wrapper">
-            <div className="grid-background"></div>
+            <div className="home-slider" onScroll={handleScroll} ref={sliderRef}>
 
-            <div className="vue active gta-home-bg">
+                {/* ================= PAGE 1 ================= */}
+                <div className="home-page">
+                    <div className="app-grid">
+                        {/* On envoie la prop 'color' à AppIcon pour définir la bordure électrique */}
+                        <AppIcon color="#2ecc71" icon={<TreePine size={34} color="#2ecc71" />} name="Activités" onClick={() => onOuvrirApp('activites')} />
+                        <AppIcon color="#f39c12" icon={<ShoppingBag size={34} color="#f39c12" />} name="Magasins" onClick={() => onOuvrirApp('magasins')} />
+                        <AppIcon color="#e74c3c" icon={<Map size={34} color="#e74c3c" />} name="Cartes" onClick={() => onOuvrirApp('cartes')} />
+                        <AppIcon color="#3498db" icon={<Fish size={34} color="#3498db" />} name="Pêche" onClick={() => onOuvrirApp('peche')} />
+                        <AppIcon color="#d35400" icon={<Utensils size={34} color="#d35400" />} name="Recettes" onClick={() => onOuvrirApp('recettes')} />
+                        <AppIcon color="#1abc9c" icon={<User size={34} color="#1abc9c" />} name="Contacts" onClick={() => onOuvrirApp('contacts')} />
+                    </div>
 
-                {/* LE CONTENEUR QUI GLISSE */}
-                <div className="home-slider" onScroll={handleScroll}>
+                    {/* WIDGETS DE LA PAGE 1 */}
+                    <div className="widgets-container" style={{ display: 'flex', flexDirection: 'column', padding: '0 20px', marginTop: 'auto', marginBottom: '10px' }}>
 
-                    {/* ================= PAGE 1 ================= */}
-                    <div className="home-page">
-                        <div className="app-grid">
-                            <AppIcon icon={<TreePine size={34} color="#2ecc71" />} name="Activités" onClick={() => onOuvrirApp('activites')} />
-                            <AppIcon icon={<ShoppingBag size={34} color="#f39c12" />} name="Magasins" onClick={() => onOuvrirApp('magasins')} />
-                            <AppIcon icon={<Map size={34} color="#e74c3c" />} name="Cartes" onClick={() => onOuvrirApp('cartes')} />
-                            <AppIcon icon={<Fish size={34} color="#3498db" />} name="Pêche" onClick={() => onOuvrirApp('peche')} />
-                            <AppIcon icon={<Utensils size={34} color="#d35400" />} name="Recettes" onClick={() => onOuvrirApp('recettes')} />
-                            <AppIcon icon={<User size={34} color="#34495e" />} name="Contacts" onClick={() => onOuvrirApp('contacts')} />
-                        </div>
-
-                        {/* WIDGETS DE LA PAGE 1 */}
-                        <div className="widgets-container" style={{ display: 'flex', flexDirection: 'column', gap: '15px', padding: '0 20px', marginTop: 'auto' }}>
-                            <div
-                                className="gta-widget"
-                                onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')}
-                                style={{ display: 'flex', alignItems: 'center', gap: '15px', cursor: 'pointer', margin: '0 !important' }}
-                            >
-                                <img src="/chalet.png" alt="Chalet" className="widget-image" style={{ width: '65px', height: '65px', objectFit: 'cover', borderRadius: '8px' }} />
-                                <div>
-                                    <div><strong>Où l'on se crée des souvenirs ↗</strong></div>
-                                    <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }}>
+                        {/* Widget Chalet (Vert électrique) */}
+                        <div className="electric-card-wrapper" onClick={() => window.open('https://hotelalamaison.ca/chalet/ou-lon-se-cree-des-souvenirs/', '_blank')} style={{ '--electric-color': '#2ecc71', marginBottom: '15px' }}>
+                            <div className="electric-card-inner" style={{ padding: '12px 15px', gap: '15px' }}>
+                                <img src="/chalet.png" alt="Chalet" style={{ width: '55px', height: '55px', objectFit: 'cover', borderRadius: '10px' }} />
+                                <div style={{ flex: 1 }}>
+                                    <div style={{ color: 'white', fontWeight: 'bold', fontSize: '14px' }}>Où l'on se crée des souvenirs ↗</div>
+                                    <div style={{ color: '#2ecc71', fontSize: '12px', marginTop: '3px' }}>
                                         {chaletInfo}
                                     </div>
                                 </div>
                             </div>
-                            <WidgetMeteo onClick={() => window.open('https://www.meteomedia.com/fr/ville/ca/quebec/baie-saint-paul/actuelle', '_blank')} />
                         </div>
-                    </div>
 
-                    {/* ================= PAGE 2 ================= */}
-                    <div className="home-page">
-                        <div className="app-grid">
-                            <AppIcon icon={<Camera size={34} color="#9b59b6" />} name="Galerie" onClick={() => onOuvrirApp('galerie')} />
-                            <AppIcon icon={<Settings size={34} color="#7f8c8d" />} name="Réglages" onClick={() => onOuvrirApp('reglages')} />
-                            <AppIcon icon={<Rocket size={34} color="#ff4757" />} name="" onClick={() => onOuvrirApp('secret')} />
-                        </div>
+                        {/* Widget Météo */}
+                        <WidgetMeteo onClick={() => window.open('https://www.meteomedia.com/fr/ville/ca/quebec/baie-saint-paul/actuelle', '_blank')} />
                     </div>
-
                 </div>
 
-                {/* LES PETITS POINTS DE NAVIGATION */}
-                <div className="pagination-dots">
-                    <div className={`dot ${activePage === 0 ? 'active' : ''}`}></div>
-                    <div className={`dot ${activePage === 1 ? 'active' : ''}`}></div>
+                {/* ================= PAGE 2 ================= */}
+                <div className="home-page">
+                    <div className="app-grid">
+                        <AppIcon color="#9b59b6" icon={<Camera size={34} color="#9b59b6" />} name="Galerie" onClick={() => onOuvrirApp('galerie')} />
+                        <AppIcon color="#95a5a6" icon={<Settings size={34} color="#95a5a6" />} name="Réglages" onClick={() => onOuvrirApp('reglages')} />
+                        <AppIcon color="#ff4757" icon={<Rocket size={34} color="#ff4757" />} name="Projet X" onClick={() => onOuvrirApp('secret')} />
+                    </div>
                 </div>
 
+            </div>
+
+            <div className="pagination-dots">
+                <div className={`dot ${activePage === 0 ? 'active' : ''}`}></div>
+                <div className={`dot ${activePage === 1 ? 'active' : ''}`}></div>
             </div>
         </div>
     );
