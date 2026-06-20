@@ -59,7 +59,7 @@ export default function App() {
                     backgroundColor="transparent"
                     rangeY={400}
                     particleCount={1000}
-                    baseHue={220} /* Change ici pour la couleur */
+                    baseHue={180} /* Change ici pour la couleur */
                 />
             </div>
 
