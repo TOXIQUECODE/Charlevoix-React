@@ -352,6 +352,7 @@ body {
   body { padding: 0; background: #000; }
   #root { padding: 0; }
   .gta-phone {
+    background-color:transparent;
     /* 15px de chaque côté = 30px à retirer de la largeur totale */
     width: calc(100% - 30px);
     /* 15px en haut + 25px en bas = 40px à retirer de la hauteur totale */
