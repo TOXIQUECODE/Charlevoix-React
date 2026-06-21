@@ -11,6 +11,7 @@ import ContactsScreen from './components/ContactsScreen';
 import ReglagesScreen from './components/ReglagesScreen';
 import NipScreen from './components/NipScreen';
 import WelcomeScreen from './components/WelcomeScreen';
+import ProjectXScreen from './components/ProjectXScreen';
 
 // L'import du Vortex
 import { Vortex } from './ui/vortex';
@@ -44,19 +45,7 @@ export default function App() {
                 {pageActive === 'galerie' && <GalerieScreen />}
                 {pageActive === 'contacts' && <ContactsScreen />}
                 {pageActive === 'reglages' && <ReglagesScreen />}
-
-                {/* LA FUTURE PAGE MALBAIE/TADOUSSAC */}
-                {pageActive === 'malbaie' && (
-                    <div className="vue active">
-                        <div className="app-header"><h2>Malbaie</h2></div>
-                        <div className="app-content" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                            <div style={{ textAlign: 'center', opacity: 0.7 }}>
-                                <Car size={60} color="#e6c280" style={{ marginBottom: '20px' }} />
-                                <p>En attente des instructions... 🚗</p>
-                            </div>
-                        </div>
-                    </div>
-                )}
+                {pageActive === 'projectx' && <ProjectXScreen />}
             </>
         );
     };
