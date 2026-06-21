@@ -425,3 +425,51 @@ body {
   opacity: 0.5;
   cursor: pointer;
 }
+
+/* =========================================
+   PROJECT X - FIX ÉCRAN & BORDURE ÉLECTRIQUE
+========================================= */
+
+/* 1. On empêche le zoom de déborder de la coque */
+.px-zoomed-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 2. Le cadre électrique animé pour le tableau */
+.px-electric-table {
+  position: relative;
+  padding: 2px; /* Épaisseur de l'éclair */
+  border-radius: 16px;
+  margin-bottom: 15px;
+  z-index: 1;
+}
+
+/* Le faisceau doré qui tourne */
+.px-electric-table::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(from var(--spin-angle), transparent 0deg, #e6c280 90deg, transparent 180deg);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  animation: spin-gradient 3s linear infinite, flicker 0.15s infinite alternate;
+  z-index: -1;
+}
+
+/* 3. L'intérieur du tableau en verre fumé */
+.px-electric-inner {
+  background: rgba(10, 10, 10, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  overflow: hidden; /* Empêche les coins de dépasser sur l'éclair */
+  z-index: 2;
+}

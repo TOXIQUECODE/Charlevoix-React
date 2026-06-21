@@ -2,9 +2,6 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 import { Calendar, ChevronLeft, Plus, Save, Download, Crown, TreePine, ShoppingBag, Fish, Utensils, Car, HelpCircle } from 'lucide-react';
 
-// ==========================================
-// 1. HARMONISATION VISUELLE (Icônes et couleurs seulement)
-// ==========================================
 const CONFIG_APPLICATIONS = {
     "Activités": { icon: TreePine, color: "#2ecc71" },
     "Magasins": { icon: ShoppingBag, color: "#f39c12" },
@@ -15,35 +12,27 @@ const CONFIG_APPLICATIONS = {
 const typesDisponibles = Object.keys(CONFIG_APPLICATIONS);
 
 export default function ProjectXScreen() {
-    // ==========================================
-    // 2. LE MOTEUR DE RECHERCHE SUPABASE (LA MAGIE)
-    // ==========================================
-    // C'est ici qu'on stocke les vraies listes de ton site
     const [listesSite, setListesSite] = useState({
         "Activités": ["Chargement..."],
         "Magasins": ["Chargement..."],
         "Pêche": ["Chargement..."],
         "Restaurants": ["Chargement..."],
-        "Trajets": ["Départ du Chalet", "Retour au Chalet", "En route", "Arrêt essence"] // Trajets reste fixe car ce n'est pas dans la BDD
+        "Trajets": ["Départ du Chalet", "Retour au Chalet", "En route", "Arrêt essence"]
     });
 
     useEffect(() => {
         async function chargerToutesLesDonnees() {
-            // Fonction pour aller chercher le nom dans une table spécifique
             const fetchNoms = async (table) => {
                 const { data, error } = await supabase.from(table).select('nom');
                 if (error || !data || data.length === 0) return ["(Aucun élément trouvé)"];
                 return data.map(item => item.nom);
             };
 
-            // On va chercher dans toutes tes tables en même temps !
-            // (Si le nom de ta table Restaurant prend un 's', change 'restaurant' pour 'restaurants' ci-dessous)
             const activitesData = await fetchNoms('activites');
             const magasinsData = await fetchNoms('magasins');
             const pecheData = await fetchNoms('peche');
-            const restaurantsData = await fetchNoms('magasins');
+            const restaurantsData = await fetchNoms('restaurant');
 
-            // On met à jour nos listes avec les vraies données du site
             setListesSite({
                 "Activités": activitesData,
                 "Magasins": magasinsData,
@@ -55,9 +44,6 @@ export default function ProjectXScreen() {
         chargerToutesLesDonnees();
     }, []);
 
-    // ==========================================
-    // 3. LA MÉMOIRE DE L'UTILISATEUR (SAUVEGARDE)
-    // ==========================================
     const [data, setData] = useState(() => {
         const defaultType = typesDisponibles[0];
         const newData = {
@@ -70,7 +56,6 @@ export default function ProjectXScreen() {
             const saved = localStorage.getItem('projectX_current');
             if (saved) {
                 let parsed = JSON.parse(saved);
-                // Sécurité pour mettre à jour les anciens noms
                 ["24", "25", "26"].forEach(day => {
                     if (parsed[day]) {
                         parsed[day] = parsed[day].map(row => {
@@ -92,9 +77,6 @@ export default function ProjectXScreen() {
     const [backupCode, setBackupCode] = useState("");
     const [inputCode, setInputCode] = useState("");
 
-    // ==========================================
-    // MOTEUR DU CARROUSEL 3D
-    // ==========================================
     const daysList = ["24", "25", "26"];
     const [frontIndex, setFrontIndex] = useState(0);
     const [touchStartY, setTouchStartY] = useState(null);
@@ -116,9 +98,6 @@ export default function ProjectXScreen() {
         setTouchStartY(null);
     };
 
-    // ==========================================
-    // FONCTIONS DU TABLEAU
-    // ==========================================
     useEffect(() => {
         localStorage.setItem('projectX_current', JSON.stringify(data));
     }, [data]);
@@ -127,11 +106,8 @@ export default function ProjectXScreen() {
         setData(prev => ({ ...prev, [day]: prev[day].map(row => row.id === id ? { ...row, [field]: value } : row) }));
     };
 
-    // Changement de Type -> Change la liste déroulante dynamiquement
     const handleTypeChange = (day, id, newType) => {
-        // Va chercher le premier élément de la VRAIE liste chargée depuis Supabase
         const newQuoi = listesSite[newType][0];
-
         setData(prev => ({
             ...prev,
             [day]: prev[day].map(row => row.id === id ? { ...row, type: newType, quoi: newQuoi } : row)
@@ -167,97 +143,86 @@ export default function ProjectXScreen() {
     };
 
     // ==========================================
-    // VUE 1 : LE TABLEAU ZOOMÉ
+    // VUE 1 : LE TABLEAU ZOOMÉ (FIXÉ ET ÉLECTRIQUE)
     // ==========================================
     if (activeDay) {
         return (
-            <div className="vue active px-zoomed-container" style={{ padding: '15px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', gap: '15px' }}>
+            <div className="vue active px-zoomed-container">
+                {/* L'en-tête (Fixe en haut, ne scrolle pas) */}
+                <div style={{ display: 'flex', alignItems: 'center', padding: '15px', flexShrink: 0, gap: '15px' }}>
                     <button onClick={() => setActiveDay(null)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', padding: '8px', borderRadius: '50%', color: 'white', cursor: 'pointer' }}>
                         <ChevronLeft size={24} />
                     </button>
                     <h2 style={{ margin: 0, color: '#e6c280' }}>Planification du {activeDay}</h2>
                 </div>
 
-                <div className="app-content" style={{ padding: 0 }}>
-                    <div className="px-table-wrapper">
-                        <table className="px-table" style={{ tableLayout: 'fixed', width: '100%' }}>
-                            <thead>
-                            <tr>
-                                <th style={{ width: '25%', textAlign: 'center' }}>Heure</th>
-                                <th style={{ width: '75%', paddingLeft: '15px' }}>Activité Prévue</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {data[activeDay].map((row) => {
-                                const configLigne = CONFIG_APPLICATIONS[row.type] || { icon: HelpCircle, color: "#ff0000" };
-                                const IconeDynamique = configLigne.icon;
+                {/* La zone de contenu (Défile indépendamment sans pousser l'écran) */}
+                <div className="app-content" style={{ padding: '0 15px 20px 15px', flex: 1, overflowY: 'auto' }}>
 
-                                // On s'assure que la liste existe bien avant de l'afficher (Protection anti-crash)
-                                const listeActuelle = listesSite[row.type] || ["Erreur de liste"];
+                    {/* Le Wrapper Électrique */}
+                    <div className="px-electric-table">
+                        <div className="px-electric-inner">
+                            <table className="px-table" style={{ tableLayout: 'fixed', width: '100%' }}>
+                                <thead>
+                                <tr>
+                                    <th style={{ width: '25%', textAlign: 'center', background: 'rgba(0,0,0,0.6)' }}>Heure</th>
+                                    <th style={{ width: '75%', paddingLeft: '15px', background: 'rgba(0,0,0,0.6)' }}>Activité Prévue</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {data[activeDay].map((row) => {
+                                    const configLigne = CONFIG_APPLICATIONS[row.type] || { icon: HelpCircle, color: "#ff0000" };
+                                    const IconeDynamique = configLigne.icon;
+                                    const listeActuelle = listesSite[row.type] || ["Erreur de liste"];
 
-                                return (
-                                    <tr key={row.id}>
-                                        <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)', verticalAlign: 'middle', padding: '10px 5px' }}>
-                                            <input
-                                                type="time"
-                                                className="px-input"
-                                                style={{ fontSize: '14px', width: '100%', padding: '5px' }}
-                                                value={row.quand}
-                                                onChange={(e) => updateRow(activeDay, row.id, 'quand', e.target.value)}
-                                            />
-                                        </td>
+                                    return (
+                                        <tr key={row.id}>
+                                            <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)', verticalAlign: 'middle', padding: '10px 5px' }}>
+                                                <input
+                                                    type="time"
+                                                    className="px-input"
+                                                    style={{ fontSize: '14px', width: '100%', padding: '5px' }}
+                                                    value={row.quand}
+                                                    onChange={(e) => updateRow(activeDay, row.id, 'quand', e.target.value)}
+                                                />
+                                            </td>
 
-                                        <td style={{ padding: '10px' }}>
-                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                            <td style={{ padding: '10px' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                                    <div style={{
+                                                        background: 'rgba(255,255,255,0.05)',
+                                                        padding: '8px',
+                                                        borderRadius: '10px',
+                                                        display: 'flex', justifyContent: 'center', alignItems: 'center',
+                                                        boxShadow: `0 0 10px ${configLigne.color}40`
+                                                    }}>
+                                                        <IconeDynamique size={26} color={configLigne.color} />
+                                                    </div>
 
-                                                <div style={{
-                                                    background: 'rgba(255,255,255,0.05)',
-                                                    padding: '8px',
-                                                    borderRadius: '10px',
-                                                    display: 'flex', justifyContent: 'center', alignItems: 'center',
-                                                    boxShadow: `0 0 10px ${configLigne.color}40`
-                                                }}>
-                                                    <IconeDynamique size={26} color={configLigne.color} />
+                                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: 0 }}>
+                                                        <select className="px-select" style={{ width: '100%' }} value={row.type} onChange={(e) => handleTypeChange(activeDay, row.id, e.target.value)}>
+                                                            {typesDisponibles.map(type => (
+                                                                <option key={type} value={type}>{type}</option>
+                                                            ))}
+                                                        </select>
+
+                                                        <select className="px-select" style={{ width: '100%', color: 'white', background: 'rgba(255,255,255,0.05)' }} value={row.quoi} onChange={(e) => updateRow(activeDay, row.id, 'quoi', e.target.value)}>
+                                                            {listeActuelle.map((optionNom, i) => (
+                                                                <option key={`${optionNom}-${i}`} value={optionNom}>{optionNom}</option>
+                                                            ))}
+                                                        </select>
+                                                    </div>
                                                 </div>
-
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: 0 }}>
-
-                                                    {/* 1. Sélection de la catégorie */}
-                                                    <select
-                                                        className="px-select"
-                                                        style={{ width: '100%' }}
-                                                        value={row.type}
-                                                        onChange={(e) => handleTypeChange(activeDay, row.id, e.target.value)}
-                                                    >
-                                                        {typesDisponibles.map(type => (
-                                                            <option key={type} value={type}>{type}</option>
-                                                        ))}
-                                                    </select>
-
-                                                    {/* 2. Sélection dynamique depuis Supabase */}
-                                                    <select
-                                                        className="px-select"
-                                                        style={{ width: '100%', color: 'white', background: 'rgba(255,255,255,0.05)' }}
-                                                        value={row.quoi}
-                                                        onChange={(e) => updateRow(activeDay, row.id, 'quoi', e.target.value)}
-                                                    >
-                                                        {listeActuelle.map((optionNom, i) => (
-                                                            <option key={`${optionNom}-${i}`} value={optionNom}>{optionNom}</option>
-                                                        ))}
-                                                    </select>
-
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
-                            })}
-                            </tbody>
-                        </table>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <button className="px-btn-add" onClick={() => addRow(activeDay)}>
+                    <button className="px-btn-add" onClick={() => addRow(activeDay)} style={{ marginBottom: '40px' }}>
                         <Plus size={20} /> Ajouter une étape
                     </button>
                 </div>
