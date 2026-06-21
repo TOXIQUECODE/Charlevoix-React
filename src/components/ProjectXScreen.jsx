@@ -1,29 +1,54 @@
 import { useState, useEffect } from 'react';
 import { Calendar, ChevronLeft, Plus, Save, Download, Crown } from 'lucide-react';
 
+// ==========================================
+// BASE DE DONNÉES DES CHOIX DU SITE
+// ==========================================
+// Tu pourras modifier cette liste avec les vrais noms de ton site !
+const siteOptions = {
+    "Activité": [
+        "Où l'on se crée des souvenirs",
+        "Randonnée",
+        "Croisière aux baleines",
+        "Casino de Charlevoix",
+        "Autre..."
+    ],
+    "Pêche": [
+        "Lac de la pourvoirie",
+        "Rivière Gouffre",
+        "Pêche au saumon",
+        "Autre..."
+    ],
+    "Restaurant": [
+        "Le Saint-Pub",
+        "Casse-croûte local",
+        "Souper au chalet",
+        "Autre..."
+    ],
+    "Trajet": [
+        "Départ vers l'activité",
+        "Retour au chalet",
+        "Arrêt épicerie",
+        "Autre..."
+    ]
+};
+
 export default function ProjectXScreen() {
-    // 1. LA MÉMOIRE (Avec effacement automatique de l'ancien format)
+    // 1. LA MÉMOIRE
     const [data, setData] = useState(() => {
         try {
             const saved = localStorage.getItem('projectX_current');
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                // Si le système détecte l'ancienne colonne "time", il réinitialise pour éviter un crash
-                if (parsed["24"][0] && parsed["24"][0].time !== undefined) {
-                    throw new Error("Ancien format détecté");
-                }
-                return parsed;
-            }
+            if (saved) return JSON.parse(saved);
         } catch (error) {
-            console.warn("Nouveau format QUAND/QUOI appliqué. Cache réinitialisé.");
+            console.warn("Cache réinitialisé.");
             localStorage.removeItem('projectX_current');
         }
 
-        // Le nouveau format par défaut
+        // Le format par défaut (avec la première option pré-sélectionnée)
         return {
-            "24": [{ id: Date.now(), quand: "", type: "Activité", quoi: "" }],
-            "25": [{ id: Date.now() + 1, quand: "", type: "Activité", quoi: "" }],
-            "26": [{ id: Date.now() + 2, quand: "", type: "Activité", quoi: "" }]
+            "24": [{ id: Date.now(), quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }],
+            "25": [{ id: Date.now() + 1, quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }],
+            "26": [{ id: Date.now() + 2, quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }]
         };
     });
 
@@ -66,8 +91,20 @@ export default function ProjectXScreen() {
         setData(prev => ({ ...prev, [day]: prev[day].map(row => row.id === id ? { ...row, [field]: value } : row) }));
     };
 
+    // Gestion spéciale quand on change le TYPE (Activité -> Pêche, etc.)
+    const handleTypeChange = (day, id, newType) => {
+        const newQuoi = siteOptions[newType][0]; // Prend le premier élément de la nouvelle catégorie
+        setData(prev => ({
+            ...prev,
+            [day]: prev[day].map(row => row.id === id ? { ...row, type: newType, quoi: newQuoi } : row)
+        }));
+    };
+
     const addRow = (day) => {
-        setData(prev => ({ ...prev, [day]: [...prev[day], { id: Date.now(), quand: "", type: "Activité", quoi: "" }] }));
+        setData(prev => ({
+            ...prev,
+            [day]: [...prev[day], { id: Date.now(), quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }]
+        }));
     };
 
     const handleSaveBackup = () => {
@@ -95,8 +132,8 @@ export default function ProjectXScreen() {
     // ==========================================
     if (activeDay) {
         return (
-            <div className="vue active px-zoomed-container" style={{ padding: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', gap: '15px' }}>
+            <div className="vue active px-zoomed-container" style={{ padding: '15px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', gap: '15px' }}>
                     <button onClick={() => setActiveDay(null)} style={{ background: 'rgba(255,255,255,0.2)', border: 'none', padding: '8px', borderRadius: '50%', color: 'white', cursor: 'pointer' }}>
                         <ChevronLeft size={24} />
                     </button>
@@ -105,11 +142,11 @@ export default function ProjectXScreen() {
 
                 <div className="app-content" style={{ padding: 0 }}>
                     <div className="px-table-wrapper">
-                        <table className="px-table">
+                        <table className="px-table" style={{ tableLayout: 'fixed' }}>
                             <thead>
                             <tr>
                                 <th style={{ width: '30%', textAlign: 'center' }}>QUAND</th>
-                                <th style={{ width: '70%', paddingLeft: '15px' }}>QUOI</th>
+                                <th style={{ width: '70%', paddingLeft: '10px' }}>QUOI</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -117,23 +154,25 @@ export default function ProjectXScreen() {
                                 <tr key={row.id}>
 
                                     {/* COLONNE QUAND (Sélecteur d'heure) */}
-                                    <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)' }}>
+                                    <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)', verticalAlign: 'top', padding: '10px 0' }}>
                                         <input
                                             type="time"
                                             className="px-input"
+                                            style={{ fontSize: '15px', width: '100%', boxSizing: 'border-box' }}
                                             value={row.quand}
                                             onChange={(e) => updateRow(activeDay, row.id, 'quand', e.target.value)}
                                         />
                                     </td>
 
-                                    {/* COLONNE QUOI (Type + Texte) */}
-                                    <td>
-                                        <div style={{ display: 'flex', gap: '8px', padding: '6px 8px' }}>
-                                            {/* Le menu déroulant pour le type */}
+                                    {/* COLONNE QUOI (Type empilé sur le Nom) */}
+                                    <td style={{ padding: '8px' }}>
+                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                            {/* Le menu déroulant du TYPE */}
                                             <select
                                                 className="px-select"
+                                                style={{ width: '100%', boxSizing: 'border-box' }}
                                                 value={row.type}
-                                                onChange={(e) => updateRow(activeDay, row.id, 'type', e.target.value)}
+                                                onChange={(e) => handleTypeChange(activeDay, row.id, e.target.value)}
                                             >
                                                 <option value="Activité">🎯 Activité</option>
                                                 <option value="Pêche">🐟 Pêche</option>
@@ -141,15 +180,17 @@ export default function ProjectXScreen() {
                                                 <option value="Trajet">🚗 Trajet</option>
                                             </select>
 
-                                            {/* Le champ texte pour les détails */}
-                                            <input
-                                                type="text"
-                                                className="px-input"
-                                                style={{ flex: 1, padding: '8px' }}
-                                                placeholder="Détails, lieu..."
+                                            {/* Le menu déroulant du LIEU/NOM (Dynamique) */}
+                                            <select
+                                                className="px-select"
+                                                style={{ width: '100%', boxSizing: 'border-box', color: 'white', background: 'rgba(255,255,255,0.05)' }}
                                                 value={row.quoi}
                                                 onChange={(e) => updateRow(activeDay, row.id, 'quoi', e.target.value)}
-                                            />
+                                            >
+                                                {siteOptions[row.type].map(option => (
+                                                    <option key={option} value={option}>{option}</option>
+                                                ))}
+                                            </select>
                                         </div>
                                     </td>
 
