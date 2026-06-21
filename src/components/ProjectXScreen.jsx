@@ -1,56 +1,76 @@
 import { useState, useEffect } from 'react';
+import { supabase } from '../supabaseClient';
 import { Calendar, ChevronLeft, Plus, Save, Download, Crown, TreePine, ShoppingBag, Fish, Utensils, Car, HelpCircle } from 'lucide-react';
 
 // ==========================================
-// HARMONISATION : Icônes, Couleurs et Listes
+// 1. HARMONISATION VISUELLE (Icônes et couleurs seulement)
 // ==========================================
 const CONFIG_APPLICATIONS = {
-    "Activités": {
-        icon: TreePine,
-        color: "#2ecc71",
-        listes: ["Randonnée Acropole", "AURA Québec", "Casino de Charlevoix", "Autre activité..."]
-    },
-    "Magasins": {
-        icon: ShoppingBag,
-        color: "#f39c12",
-        listes: ["Boutique locale", "Épicerie", "Souvenirs", "Autre magasin..."]
-    },
-    "Pêche": {
-        icon: Fish,
-        color: "#3498db",
-        listes: ["Quai de Baie-St-Paul", "Rivière du Gouffre", "Pourvoirie", "Autre spot..."]
-    },
-    "Restaurants": {
-        icon: Utensils,
-        color: "#d35400",
-        listes: ["Le Saint-Pub", "Mouton Noir", "Casse-croûte", "Autre resto..."]
-    },
-    "Trajets": {
-        icon: Car,
-        color: "#95a5a6",
-        listes: ["Départ du Chalet", "Retour au Chalet", "En route", "Arrêt essence..."]
-    }
+    "Activités": { icon: TreePine, color: "#2ecc71" },
+    "Magasins": { icon: ShoppingBag, color: "#f39c12" },
+    "Pêche": { icon: Fish, color: "#3498db" },
+    "Restaurants": { icon: Utensils, color: "#d35400" },
+    "Trajets": { icon: Car, color: "#95a5a6" }
 };
-
 const typesDisponibles = Object.keys(CONFIG_APPLICATIONS);
 
 export default function ProjectXScreen() {
-    // 1. LA MÉMOIRE (Avec réparation des anciennes données)
+    // ==========================================
+    // 2. LE MOTEUR DE RECHERCHE SUPABASE (LA MAGIE)
+    // ==========================================
+    // C'est ici qu'on stocke les vraies listes de ton site
+    const [listesSite, setListesSite] = useState({
+        "Activités": ["Chargement..."],
+        "Magasins": ["Chargement..."],
+        "Pêche": ["Chargement..."],
+        "Restaurants": ["Chargement..."],
+        "Trajets": ["Départ du Chalet", "Retour au Chalet", "En route", "Arrêt essence"] // Trajets reste fixe car ce n'est pas dans la BDD
+    });
+
+    useEffect(() => {
+        async function chargerToutesLesDonnees() {
+            // Fonction pour aller chercher le nom dans une table spécifique
+            const fetchNoms = async (table) => {
+                const { data, error } = await supabase.from(table).select('nom');
+                if (error || !data || data.length === 0) return ["(Aucun élément trouvé)"];
+                return data.map(item => item.nom);
+            };
+
+            // On va chercher dans toutes tes tables en même temps !
+            // (Si le nom de ta table Restaurant prend un 's', change 'restaurant' pour 'restaurants' ci-dessous)
+            const activitesData = await fetchNoms('activites');
+            const magasinsData = await fetchNoms('magasins');
+            const pecheData = await fetchNoms('peche');
+            const restaurantsData = await fetchNoms('restaurant');
+
+            // On met à jour nos listes avec les vraies données du site
+            setListesSite({
+                "Activités": activitesData,
+                "Magasins": magasinsData,
+                "Pêche": pecheData,
+                "Restaurants": restaurantsData,
+                "Trajets": ["Départ du Chalet", "Retour au Chalet", "En route", "Arrêt essence"]
+            });
+        }
+        chargerToutesLesDonnees();
+    }, []);
+
+    // ==========================================
+    // 3. LA MÉMOIRE DE L'UTILISATEUR (SAUVEGARDE)
+    // ==========================================
     const [data, setData] = useState(() => {
         const defaultType = typesDisponibles[0];
-        const defaultQuoi = CONFIG_APPLICATIONS[defaultType].listes[0];
         const newData = {
-            "24": [{ id: Date.now(), quand: "12:00", type: defaultType, quoi: defaultQuoi }],
-            "25": [{ id: Date.now() + 1, quand: "12:00", type: defaultType, quoi: defaultQuoi }],
-            "26": [{ id: Date.now() + 2, quand: "12:00", type: defaultType, quoi: defaultQuoi }]
+            "24": [{ id: Date.now(), quand: "12:00", type: defaultType, quoi: "Chargement..." }],
+            "25": [{ id: Date.now() + 1, quand: "12:00", type: defaultType, quoi: "Chargement..." }],
+            "26": [{ id: Date.now() + 2, quand: "12:00", type: defaultType, quoi: "Chargement..." }]
         };
 
         try {
             const saved = localStorage.getItem('projectX_current');
             if (saved) {
                 let parsed = JSON.parse(saved);
-
-                // MÉCANISME ANTI-CRASH : On vérifie si l'ancien "Activité" (sans s) est là, et on le corrige
+                // Sécurité pour mettre à jour les anciens noms
                 ["24", "25", "26"].forEach(day => {
                     if (parsed[day]) {
                         parsed[day] = parsed[day].map(row => {
@@ -63,10 +83,8 @@ export default function ProjectXScreen() {
                 return parsed;
             }
         } catch (error) {
-            console.warn("Erreur de cache, chargement des données par défaut.");
             localStorage.removeItem('projectX_current');
         }
-
         return newData;
     });
 
@@ -99,7 +117,7 @@ export default function ProjectXScreen() {
     };
 
     // ==========================================
-    // SAUVEGARDES ET MISES À JOUR
+    // FONCTIONS DU TABLEAU
     // ==========================================
     useEffect(() => {
         localStorage.setItem('projectX_current', JSON.stringify(data));
@@ -109,10 +127,10 @@ export default function ProjectXScreen() {
         setData(prev => ({ ...prev, [day]: prev[day].map(row => row.id === id ? { ...row, [field]: value } : row) }));
     };
 
+    // Changement de Type -> Change la liste déroulante dynamiquement
     const handleTypeChange = (day, id, newType) => {
-        // Sécurité supplémentaire ici
-        const safeConfig = CONFIG_APPLICATIONS[newType] || CONFIG_APPLICATIONS["Activités"];
-        const newQuoi = safeConfig.listes[0];
+        // Va chercher le premier élément de la VRAIE liste chargée depuis Supabase
+        const newQuoi = listesSite[newType][0];
 
         setData(prev => ({
             ...prev,
@@ -124,7 +142,7 @@ export default function ProjectXScreen() {
         const defaultType = typesDisponibles[0];
         setData(prev => ({
             ...prev,
-            [day]: [...prev[day], { id: Date.now(), quand: "12:00", type: defaultType, quoi: CONFIG_APPLICATIONS[defaultType].listes[0] }]
+            [day]: [...prev[day], { id: Date.now(), quand: "12:00", type: defaultType, quoi: listesSite[defaultType][0] }]
         }));
     };
 
@@ -172,14 +190,11 @@ export default function ProjectXScreen() {
                             </thead>
                             <tbody>
                             {data[activeDay].map((row) => {
-                                // LE FILET DE SÉCURITÉ ANTI-CRASH :
-                                // Si row.type n'existe pas dans le dictionnaire, on affiche une erreur propre au lieu de tout faire planter.
-                                const configLigne = CONFIG_APPLICATIONS[row.type] || {
-                                    icon: HelpCircle,
-                                    color: "#ff0000",
-                                    listes: ["Erreur de catégorie"]
-                                };
+                                const configLigne = CONFIG_APPLICATIONS[row.type] || { icon: HelpCircle, color: "#ff0000" };
                                 const IconeDynamique = configLigne.icon;
+
+                                // On s'assure que la liste existe bien avant de l'afficher (Protection anti-crash)
+                                const listeActuelle = listesSite[row.type] || ["Erreur de liste"];
 
                                 return (
                                     <tr key={row.id}>
@@ -206,8 +221,9 @@ export default function ProjectXScreen() {
                                                     <IconeDynamique size={26} color={configLigne.color} />
                                                 </div>
 
-                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1, minWidth: 0 }}>
 
+                                                    {/* 1. Sélection de la catégorie */}
                                                     <select
                                                         className="px-select"
                                                         style={{ width: '100%' }}
@@ -219,14 +235,15 @@ export default function ProjectXScreen() {
                                                         ))}
                                                     </select>
 
+                                                    {/* 2. Sélection dynamique depuis Supabase */}
                                                     <select
                                                         className="px-select"
                                                         style={{ width: '100%', color: 'white', background: 'rgba(255,255,255,0.05)' }}
                                                         value={row.quoi}
                                                         onChange={(e) => updateRow(activeDay, row.id, 'quoi', e.target.value)}
                                                     >
-                                                        {configLigne.listes.map(option => (
-                                                            <option key={option} value={option}>{option}</option>
+                                                        {listeActuelle.map((optionNom, i) => (
+                                                            <option key={`${optionNom}-${i}`} value={optionNom}>{optionNom}</option>
                                                         ))}
                                                     </select>
 
