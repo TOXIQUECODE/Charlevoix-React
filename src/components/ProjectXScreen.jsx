@@ -22,15 +22,39 @@ export default function ProjectXScreen() {
 
     useEffect(() => {
         async function chargerToutesLesDonnees() {
+            // Le fetch intelligent qui détecte automatiquement la bonne colonne (nom, endroit, lieu, etc.)
             const fetchNoms = async (table) => {
-                const { data, error } = await supabase.from(table).select('nom');
-                if (error || !data || data.length === 0) return ["(Aucun élément trouvé)"];
-                return data.map(item => item.nom);
+                // On sélectionne TOUT pour éviter l'erreur 400
+                const { data, error } = await supabase.from(table).select('*');
+
+                if (error) {
+                    console.error(`❌ ERREUR SUPABASE (${table}) :`, error.message);
+                    return ["(Erreur de BDD)"];
+                }
+
+                if (!data || data.length === 0) return ["(Aucun élément trouvé)"];
+
+                // Détecteur de colonne automatique
+                const premiereLigne = data[0];
+                let colonneAUtiliser = 'nom';
+
+                if (premiereLigne.endroit !== undefined) colonneAUtiliser = 'endroit';
+                else if (premiereLigne.lieu !== undefined) colonneAUtiliser = 'lieu';
+                else if (premiereLigne.titre !== undefined) colonneAUtiliser = 'titre';
+                else if (premiereLigne.Nom !== undefined) colonneAUtiliser = 'Nom';
+                else if (premiereLigne.nom === undefined) {
+                    // Si on ne trouve rien, on prend la première colonne texte disponible
+                    const cles = Object.keys(premiereLigne).filter(k => k !== 'id' && k !== 'created_at');
+                    if(cles.length > 0) colonneAUtiliser = cles[0];
+                }
+
+                return data.map(item => item[colonneAUtiliser]);
             };
 
             const activitesData = await fetchNoms('activites');
             const magasinsData = await fetchNoms('magasins');
             const pecheData = await fetchNoms('peche');
+            // Comme demandé, la table s'appelle magasins, donc on y pointe les Restaurants
             const restaurantsData = await fetchNoms('magasins');
 
             setListesSite({
