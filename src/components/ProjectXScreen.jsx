@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Calendar, ChevronLeft, Plus, Save, Download, Crown, TreePine, ShoppingBag, Fish, Utensils, Car } from 'lucide-react';
+import { Calendar, ChevronLeft, Plus, Save, Download, Crown, TreePine, ShoppingBag, Fish, Utensils, Car, HelpCircle } from 'lucide-react';
 
 // ==========================================
-// HARMONISATION : Icônes, Couleurs et Listes des autres écrans
+// HARMONISATION : Icônes, Couleurs et Listes
 // ==========================================
-// Remplace les fausses données ci-dessous par les VRAIES listes
-// que tu utilises dans ActivitesScreen, PecheScreen, etc.
 const CONFIG_APPLICATIONS = {
     "Activités": {
         icon: TreePine,
@@ -34,28 +32,42 @@ const CONFIG_APPLICATIONS = {
     }
 };
 
-// On récupère facilement tous les types disponibles (Activités, Pêche, etc.)
 const typesDisponibles = Object.keys(CONFIG_APPLICATIONS);
 
 export default function ProjectXScreen() {
-    // 1. LA MÉMOIRE INITIALE
+    // 1. LA MÉMOIRE (Avec réparation des anciennes données)
     const [data, setData] = useState(() => {
-        try {
-            const saved = localStorage.getItem('projectX_current');
-            if (saved) return JSON.parse(saved);
-        } catch (error) {
-            localStorage.removeItem('projectX_current');
-        }
-
-        // Par défaut, la première ligne utilise le premier type ("Activités") et son premier élément
         const defaultType = typesDisponibles[0];
         const defaultQuoi = CONFIG_APPLICATIONS[defaultType].listes[0];
-
-        return {
+        const newData = {
             "24": [{ id: Date.now(), quand: "12:00", type: defaultType, quoi: defaultQuoi }],
             "25": [{ id: Date.now() + 1, quand: "12:00", type: defaultType, quoi: defaultQuoi }],
             "26": [{ id: Date.now() + 2, quand: "12:00", type: defaultType, quoi: defaultQuoi }]
         };
+
+        try {
+            const saved = localStorage.getItem('projectX_current');
+            if (saved) {
+                let parsed = JSON.parse(saved);
+
+                // MÉCANISME ANTI-CRASH : On vérifie si l'ancien "Activité" (sans s) est là, et on le corrige
+                ["24", "25", "26"].forEach(day => {
+                    if (parsed[day]) {
+                        parsed[day] = parsed[day].map(row => {
+                            if (row.type === "Activité") return { ...row, type: "Activités" };
+                            if (row.type === "Restaurant") return { ...row, type: "Restaurants" };
+                            return row;
+                        });
+                    }
+                });
+                return parsed;
+            }
+        } catch (error) {
+            console.warn("Erreur de cache, chargement des données par défaut.");
+            localStorage.removeItem('projectX_current');
+        }
+
+        return newData;
     });
 
     const [activeDay, setActiveDay] = useState(null);
@@ -97,9 +109,11 @@ export default function ProjectXScreen() {
         setData(prev => ({ ...prev, [day]: prev[day].map(row => row.id === id ? { ...row, [field]: value } : row) }));
     };
 
-    // Quand on change la catégorie, on force le nom à devenir le 1er élément de la nouvelle liste
     const handleTypeChange = (day, id, newType) => {
-        const newQuoi = CONFIG_APPLICATIONS[newType].listes[0];
+        // Sécurité supplémentaire ici
+        const safeConfig = CONFIG_APPLICATIONS[newType] || CONFIG_APPLICATIONS["Activités"];
+        const newQuoi = safeConfig.listes[0];
+
         setData(prev => ({
             ...prev,
             [day]: prev[day].map(row => row.id === id ? { ...row, type: newType, quoi: newQuoi } : row)
@@ -114,7 +128,6 @@ export default function ProjectXScreen() {
         }));
     };
 
-    // Fonctions Backup (inchangées)
     const handleSaveBackup = () => {
         const code = Math.floor(10 + Math.random() * 90).toString();
         const backups = JSON.parse(localStorage.getItem('projectX_backups') || '{}');
@@ -159,13 +172,17 @@ export default function ProjectXScreen() {
                             </thead>
                             <tbody>
                             {data[activeDay].map((row) => {
-                                // On récupère dynamiquement l'icône, la couleur et la liste pour cette ligne spécifique
-                                const configLigne = CONFIG_APPLICATIONS[row.type];
+                                // LE FILET DE SÉCURITÉ ANTI-CRASH :
+                                // Si row.type n'existe pas dans le dictionnaire, on affiche une erreur propre au lieu de tout faire planter.
+                                const configLigne = CONFIG_APPLICATIONS[row.type] || {
+                                    icon: HelpCircle,
+                                    color: "#ff0000",
+                                    listes: ["Erreur de catégorie"]
+                                };
                                 const IconeDynamique = configLigne.icon;
 
                                 return (
                                     <tr key={row.id}>
-                                        {/* COLONNE HEURE */}
                                         <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)', verticalAlign: 'middle', padding: '10px 5px' }}>
                                             <input
                                                 type="time"
@@ -176,25 +193,21 @@ export default function ProjectXScreen() {
                                             />
                                         </td>
 
-                                        {/* COLONNE QUOI (Icône + Menus empilés) */}
                                         <td style={{ padding: '10px' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
 
-                                                {/* L'ICÔNE LUCIDE MAGIQUE QUI CHANGE DE COULEUR */}
                                                 <div style={{
                                                     background: 'rgba(255,255,255,0.05)',
                                                     padding: '8px',
                                                     borderRadius: '10px',
                                                     display: 'flex', justifyContent: 'center', alignItems: 'center',
-                                                    boxShadow: `0 0 10px ${configLigne.color}40` // Petite lueur de la bonne couleur
+                                                    boxShadow: `0 0 10px ${configLigne.color}40`
                                                 }}>
                                                     <IconeDynamique size={26} color={configLigne.color} />
                                                 </div>
 
-                                                {/* LES DEUX MENUS DÉROULANTS */}
                                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
 
-                                                    {/* 1. Le choix de l'application (Pêche, Magasins, etc.) */}
                                                     <select
                                                         className="px-select"
                                                         style={{ width: '100%' }}
@@ -206,7 +219,6 @@ export default function ProjectXScreen() {
                                                         ))}
                                                     </select>
 
-                                                    {/* 2. Le choix de l'élément (Le contenu change selon l'application) */}
                                                     <select
                                                         className="px-select"
                                                         style={{ width: '100%', color: 'white', background: 'rgba(255,255,255,0.05)' }}
