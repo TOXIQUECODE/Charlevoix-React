@@ -140,7 +140,7 @@ export default function HomeScreen({ onOuvrirApp }) {
                         <AppIcon color="#3498db" icon={<Fish size={34} color="#3498db" />} name="Pêche" onClick={() => onOuvrirApp('peche')} />
                         <AppIcon color="#d35400" icon={<Utensils size={34} color="#d35400" />} name="Recettes" onClick={() => onOuvrirApp('recettes')} />
                         <AppIcon color="#1abc9c" icon={<User size={34} color="#1abc9c" />} name="Contacts" onClick={() => onOuvrirApp('contacts')} />
-                        <AppIcon color="#e6c280" icon={<Car size={34} color="#e6c280" />} name="Malbaie." onClick={() => onOuvrirApp('malbaie')} />
+                        <AppIcon color="#e6c280" icon={<Car size={34} color="#e6c280" />} name="Malbaie" onClick={() => onOuvrirApp('malbaie')} />
                     </div>
 
                     {/* WIDGETS DE LA PAGE 1 */}
