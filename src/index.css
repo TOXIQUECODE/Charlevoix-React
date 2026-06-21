@@ -160,6 +160,15 @@ body {
   background-color: transparent !important;
 }
 
+.app-grid > :nth-child(7) {
+  grid-column: 2; /* Force l'élément à se placer dans la colonne centrale */
+}
+
+.app-grid > :nth-child(7) .app-name {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
 .app-icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 
 .app-name {

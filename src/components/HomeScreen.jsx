@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import AppIcon from './AppIcon';
 import { supabase } from '../supabaseClient';
-import { TreePine, ShoppingBag, Map, Fish, Utensils, User, Camera, Settings, Rocket, Sun, CloudSun, Cloud, CloudRain, CloudLightning, Snowflake, Moon } from 'lucide-react';
+import { TreePine, ShoppingBag, Map, Fish, Utensils, User, Camera, Settings, Rocket, Sun, CloudSun, Cloud, CloudRain, CloudLightning, Snowflake, Moon, car } from 'lucide-react';
 
 // ==============================================================
 // 1. LE COMPOSANT WIDGET METEO (Maintenant Électrique !)
@@ -140,6 +140,7 @@ export default function HomeScreen({ onOuvrirApp }) {
                         <AppIcon color="#3498db" icon={<Fish size={34} color="#3498db" />} name="Pêche" onClick={() => onOuvrirApp('peche')} />
                         <AppIcon color="#d35400" icon={<Utensils size={34} color="#d35400" />} name="Recettes" onClick={() => onOuvrirApp('recettes')} />
                         <AppIcon color="#1abc9c" icon={<User size={34} color="#1abc9c" />} name="Contacts" onClick={() => onOuvrirApp('contacts')} />
+                        <AppIcon color="#e6c280" icon={<Car size={34} color="#e6c280" />} name="Malbaie/Tad." onClick={() => onOuvrirApp('malbaie')} />
                     </div>
 
                     {/* WIDGETS DE LA PAGE 1 */}
