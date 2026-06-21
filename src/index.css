@@ -271,7 +271,7 @@ body {
 .home-slider { display: flex; width: 100%; flex: 1; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
 .home-slider::-webkit-scrollbar { display: none; }
 .home-page { flex: 0 0 100%; width: 100%; scroll-snap-align: center; scroll-snap-stop: always; display: flex; flex-direction: column; margin: 0; }
-.pagination-dots { display: flex; justify-content: center; align-items: center; gap: 8px; height: 50px; padding-bottom: 10px; flex-shrink: 0; }
+.pagination-dots { display: flex; justify-content: center; align-items: center; gap: 8px; height: 55px; padding-bottom: 10px; flex-shrink: 0; background-color: black }
 .pagination-dots .dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transition: all 0.3s ease; }
 .pagination-dots .dot.active { background: rgba(255, 255, 255, 0.9); transform: scale(1.3); }
 
