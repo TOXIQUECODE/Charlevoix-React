@@ -1,54 +1,60 @@
 import { useState, useEffect } from 'react';
-import { Calendar, ChevronLeft, Plus, Save, Download, Crown } from 'lucide-react';
+import { Calendar, ChevronLeft, Plus, Save, Download, Crown, TreePine, ShoppingBag, Fish, Utensils, Car } from 'lucide-react';
 
 // ==========================================
-// BASE DE DONNÉES DES CHOIX DU SITE
+// HARMONISATION : Icônes, Couleurs et Listes des autres écrans
 // ==========================================
-// Tu pourras modifier cette liste avec les vrais noms de ton site !
-const siteOptions = {
-    "Activité": [
-        "Où l'on se crée des souvenirs",
-        "Randonnée",
-        "Croisière aux baleines",
-        "Casino de Charlevoix",
-        "Autre..."
-    ],
-    "Pêche": [
-        "Lac de la pourvoirie",
-        "Rivière Gouffre",
-        "Pêche au saumon",
-        "Autre..."
-    ],
-    "Restaurant": [
-        "Le Saint-Pub",
-        "Casse-croûte local",
-        "Souper au chalet",
-        "Autre..."
-    ],
-    "Trajet": [
-        "Départ vers l'activité",
-        "Retour au chalet",
-        "Arrêt épicerie",
-        "Autre..."
-    ]
+// Remplace les fausses données ci-dessous par les VRAIES listes
+// que tu utilises dans ActivitesScreen, PecheScreen, etc.
+const CONFIG_APPLICATIONS = {
+    "Activités": {
+        icon: TreePine,
+        color: "#2ecc71",
+        listes: ["Randonnée Acropole", "AURA Québec", "Casino de Charlevoix", "Autre activité..."]
+    },
+    "Magasins": {
+        icon: ShoppingBag,
+        color: "#f39c12",
+        listes: ["Boutique locale", "Épicerie", "Souvenirs", "Autre magasin..."]
+    },
+    "Pêche": {
+        icon: Fish,
+        color: "#3498db",
+        listes: ["Quai de Baie-St-Paul", "Rivière du Gouffre", "Pourvoirie", "Autre spot..."]
+    },
+    "Restaurants": {
+        icon: Utensils,
+        color: "#d35400",
+        listes: ["Le Saint-Pub", "Mouton Noir", "Casse-croûte", "Autre resto..."]
+    },
+    "Trajets": {
+        icon: Car,
+        color: "#95a5a6",
+        listes: ["Départ du Chalet", "Retour au Chalet", "En route", "Arrêt essence..."]
+    }
 };
 
+// On récupère facilement tous les types disponibles (Activités, Pêche, etc.)
+const typesDisponibles = Object.keys(CONFIG_APPLICATIONS);
+
 export default function ProjectXScreen() {
-    // 1. LA MÉMOIRE
+    // 1. LA MÉMOIRE INITIALE
     const [data, setData] = useState(() => {
         try {
             const saved = localStorage.getItem('projectX_current');
             if (saved) return JSON.parse(saved);
         } catch (error) {
-            console.warn("Cache réinitialisé.");
             localStorage.removeItem('projectX_current');
         }
 
-        // Le format par défaut (avec la première option pré-sélectionnée)
+        // Par défaut, la première ligne utilise le premier type ("Activités") et son premier élément
+        const defaultType = typesDisponibles[0];
+        const defaultQuoi = CONFIG_APPLICATIONS[defaultType].listes[0];
+
         return {
-            "24": [{ id: Date.now(), quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }],
-            "25": [{ id: Date.now() + 1, quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }],
-            "26": [{ id: Date.now() + 2, quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }]
+            "24": [{ id: Date.now(), quand: "12:00", type: defaultType, quoi: defaultQuoi }],
+            "25": [{ id: Date.now() + 1, quand: "12:00", type: defaultType, quoi: defaultQuoi }],
+            "26": [{ id: Date.now() + 2, quand: "12:00", type: defaultType, quoi: defaultQuoi }]
         };
     });
 
@@ -91,9 +97,9 @@ export default function ProjectXScreen() {
         setData(prev => ({ ...prev, [day]: prev[day].map(row => row.id === id ? { ...row, [field]: value } : row) }));
     };
 
-    // Gestion spéciale quand on change le TYPE (Activité -> Pêche, etc.)
+    // Quand on change la catégorie, on force le nom à devenir le 1er élément de la nouvelle liste
     const handleTypeChange = (day, id, newType) => {
-        const newQuoi = siteOptions[newType][0]; // Prend le premier élément de la nouvelle catégorie
+        const newQuoi = CONFIG_APPLICATIONS[newType].listes[0];
         setData(prev => ({
             ...prev,
             [day]: prev[day].map(row => row.id === id ? { ...row, type: newType, quoi: newQuoi } : row)
@@ -101,12 +107,14 @@ export default function ProjectXScreen() {
     };
 
     const addRow = (day) => {
+        const defaultType = typesDisponibles[0];
         setData(prev => ({
             ...prev,
-            [day]: [...prev[day], { id: Date.now(), quand: "12:00", type: "Activité", quoi: siteOptions["Activité"][0] }]
+            [day]: [...prev[day], { id: Date.now(), quand: "12:00", type: defaultType, quoi: CONFIG_APPLICATIONS[defaultType].listes[0] }]
         }));
     };
 
+    // Fonctions Backup (inchangées)
     const handleSaveBackup = () => {
         const code = Math.floor(10 + Math.random() * 90).toString();
         const backups = JSON.parse(localStorage.getItem('projectX_backups') || '{}');
@@ -128,7 +136,7 @@ export default function ProjectXScreen() {
     };
 
     // ==========================================
-    // VUE 1 : LE TABLEAU ZOOMÉ (QUAND / QUOI)
+    // VUE 1 : LE TABLEAU ZOOMÉ
     // ==========================================
     if (activeDay) {
         return (
@@ -142,66 +150,86 @@ export default function ProjectXScreen() {
 
                 <div className="app-content" style={{ padding: 0 }}>
                     <div className="px-table-wrapper">
-                        <table className="px-table" style={{ tableLayout: 'fixed' }}>
+                        <table className="px-table" style={{ tableLayout: 'fixed', width: '100%' }}>
                             <thead>
                             <tr>
-                                <th style={{ width: '30%', textAlign: 'center' }}>QUAND</th>
-                                <th style={{ width: '70%', paddingLeft: '10px' }}>QUOI</th>
+                                <th style={{ width: '25%', textAlign: 'center' }}>Heure</th>
+                                <th style={{ width: '75%', paddingLeft: '15px' }}>Activité Prévue</th>
                             </tr>
                             </thead>
                             <tbody>
-                            {data[activeDay].map((row) => (
-                                <tr key={row.id}>
+                            {data[activeDay].map((row) => {
+                                // On récupère dynamiquement l'icône, la couleur et la liste pour cette ligne spécifique
+                                const configLigne = CONFIG_APPLICATIONS[row.type];
+                                const IconeDynamique = configLigne.icon;
 
-                                    {/* COLONNE QUAND (Sélecteur d'heure) */}
-                                    <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)', verticalAlign: 'top', padding: '10px 0' }}>
-                                        <input
-                                            type="time"
-                                            className="px-input"
-                                            style={{ fontSize: '15px', width: '100%', boxSizing: 'border-box' }}
-                                            value={row.quand}
-                                            onChange={(e) => updateRow(activeDay, row.id, 'quand', e.target.value)}
-                                        />
-                                    </td>
+                                return (
+                                    <tr key={row.id}>
+                                        {/* COLONNE HEURE */}
+                                        <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)', verticalAlign: 'middle', padding: '10px 5px' }}>
+                                            <input
+                                                type="time"
+                                                className="px-input"
+                                                style={{ fontSize: '14px', width: '100%', padding: '5px' }}
+                                                value={row.quand}
+                                                onChange={(e) => updateRow(activeDay, row.id, 'quand', e.target.value)}
+                                            />
+                                        </td>
 
-                                    {/* COLONNE QUOI (Type empilé sur le Nom) */}
-                                    <td style={{ padding: '8px' }}>
-                                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                            {/* Le menu déroulant du TYPE */}
-                                            <select
-                                                className="px-select"
-                                                style={{ width: '100%', boxSizing: 'border-box' }}
-                                                value={row.type}
-                                                onChange={(e) => handleTypeChange(activeDay, row.id, e.target.value)}
-                                            >
-                                                <option value="Activité">🎯 Activité</option>
-                                                <option value="Pêche">🐟 Pêche</option>
-                                                <option value="Restaurant">🍔 Resto</option>
-                                                <option value="Trajet">🚗 Trajet</option>
-                                            </select>
+                                        {/* COLONNE QUOI (Icône + Menus empilés) */}
+                                        <td style={{ padding: '10px' }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
 
-                                            {/* Le menu déroulant du LIEU/NOM (Dynamique) */}
-                                            <select
-                                                className="px-select"
-                                                style={{ width: '100%', boxSizing: 'border-box', color: 'white', background: 'rgba(255,255,255,0.05)' }}
-                                                value={row.quoi}
-                                                onChange={(e) => updateRow(activeDay, row.id, 'quoi', e.target.value)}
-                                            >
-                                                {siteOptions[row.type].map(option => (
-                                                    <option key={option} value={option}>{option}</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </td>
+                                                {/* L'ICÔNE LUCIDE MAGIQUE QUI CHANGE DE COULEUR */}
+                                                <div style={{
+                                                    background: 'rgba(255,255,255,0.05)',
+                                                    padding: '8px',
+                                                    borderRadius: '10px',
+                                                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                                                    boxShadow: `0 0 10px ${configLigne.color}40` // Petite lueur de la bonne couleur
+                                                }}>
+                                                    <IconeDynamique size={26} color={configLigne.color} />
+                                                </div>
 
-                                </tr>
-                            ))}
+                                                {/* LES DEUX MENUS DÉROULANTS */}
+                                                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', flex: 1 }}>
+
+                                                    {/* 1. Le choix de l'application (Pêche, Magasins, etc.) */}
+                                                    <select
+                                                        className="px-select"
+                                                        style={{ width: '100%' }}
+                                                        value={row.type}
+                                                        onChange={(e) => handleTypeChange(activeDay, row.id, e.target.value)}
+                                                    >
+                                                        {typesDisponibles.map(type => (
+                                                            <option key={type} value={type}>{type}</option>
+                                                        ))}
+                                                    </select>
+
+                                                    {/* 2. Le choix de l'élément (Le contenu change selon l'application) */}
+                                                    <select
+                                                        className="px-select"
+                                                        style={{ width: '100%', color: 'white', background: 'rgba(255,255,255,0.05)' }}
+                                                        value={row.quoi}
+                                                        onChange={(e) => updateRow(activeDay, row.id, 'quoi', e.target.value)}
+                                                    >
+                                                        {configLigne.listes.map(option => (
+                                                            <option key={option} value={option}>{option}</option>
+                                                        ))}
+                                                    </select>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
                             </tbody>
                         </table>
                     </div>
 
                     <button className="px-btn-add" onClick={() => addRow(activeDay)}>
-                        <Plus size={20} /> Ajouter une ligne
+                        <Plus size={20} /> Ajouter une étape
                     </button>
                 </div>
             </div>
