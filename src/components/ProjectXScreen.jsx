@@ -31,7 +31,7 @@ export default function ProjectXScreen() {
             const activitesData = await fetchNoms('activites');
             const magasinsData = await fetchNoms('magasins');
             const pecheData = await fetchNoms('peche');
-            const restaurantsData = await fetchNoms('restaurant');
+            const restaurantsData = await fetchNoms('magasins');
 
             setListesSite({
                 "Activités": activitesData,
