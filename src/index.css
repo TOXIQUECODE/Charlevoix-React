@@ -335,10 +335,11 @@ body {
   box-shadow: 0 15px 35px rgba(0,0,0,0.4);
 }
 
-/* L'effet de profondeur exactement comme sur ta photo */
-.px-card.day-26 { transform: translateY(-60px) scale(0.85); z-index: 1; opacity: 0.5; filter: blur(4px); }
-.px-card.day-25 { transform: translateY(-30px) scale(0.92); z-index: 2; opacity: 0.8; filter: blur(1.5px); }
-.px-card.day-24 { transform: translateY(0) scale(1); z-index: 3; opacity: 1; filter: blur(0); }
+
+/* L'effet de profondeur (Maintenant basé sur la position dynamique 0, 1 ou 2) */
+.px-card.pos-2 { transform: translateY(-75px) scale(0.85); z-index: 1; opacity: 0.3; filter: blur(4px); }
+.px-card.pos-1 { transform: translateY(-35px) scale(0.92); z-index: 2; opacity: 0.8; filter: blur(1.5px); }
+.px-card.pos-0 { transform: translateY(0) scale(1); z-index: 3; opacity: 1; filter: blur(0); }
 
 /* Animation au survol */
 .px-card:active { transform: translateY(10px) scale(0.95); }
