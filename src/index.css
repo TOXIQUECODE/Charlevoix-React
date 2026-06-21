@@ -61,7 +61,7 @@ body {
 
   /* Coque solide et épaisse pour le contraste */
   border-radius: 45px;
-  border: 16px solid #080808;
+  border: 16px solid #343434;
   box-shadow: 0 30px 60px rgba(0,0,0,0.9), inset 0 0 15px rgba(0,0,0,0.6);
 
   display: flex;
