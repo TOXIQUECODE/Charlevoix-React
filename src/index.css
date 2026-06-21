@@ -388,3 +388,40 @@ body {
 }
 .px-toolbar input { flex: 1; padding: 10px; border-radius: 8px; border: none; text-align: center; font-weight: bold; }
 .px-toolbar button { padding: 10px 15px; background: #e6c280; color: #000; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+
+/* =========================================
+   PROJECT X - SÉLECTEURS (QUAND / QUOI)
+========================================= */
+
+/* Le menu déroulant (Activité / Pêche / Resto) */
+.px-select {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #e6c280; /* Texte doré */
+  padding: 8px;
+  border-radius: 8px;
+  outline: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Les options à l'intérieur du menu */
+.px-select option {
+  background: #111;
+  color: white;
+}
+
+/* Le sélecteur d'heure (QUAND) */
+.px-input[type="time"] {
+  font-weight: bold;
+  color: #e6c280; /* Heure en doré pour ressortir */
+  text-align: center;
+  cursor: pointer;
+}
+
+/* L'icône de l'horloge native (sur certains navigateurs) */
+.px-input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  opacity: 0.5;
+  cursor: pointer;
+}

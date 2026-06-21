@@ -2,18 +2,28 @@ import { useState, useEffect } from 'react';
 import { Calendar, ChevronLeft, Plus, Save, Download, Crown } from 'lucide-react';
 
 export default function ProjectXScreen() {
+    // 1. LA MÉMOIRE (Avec effacement automatique de l'ancien format)
     const [data, setData] = useState(() => {
         try {
             const saved = localStorage.getItem('projectX_current');
-            if (saved) return JSON.parse(saved);
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                // Si le système détecte l'ancienne colonne "time", il réinitialise pour éviter un crash
+                if (parsed["24"][0] && parsed["24"][0].time !== undefined) {
+                    throw new Error("Ancien format détecté");
+                }
+                return parsed;
+            }
         } catch (error) {
-            console.error("Cache corrompu, on repart à zéro");
+            console.warn("Nouveau format QUAND/QUOI appliqué. Cache réinitialisé.");
             localStorage.removeItem('projectX_current');
         }
+
+        // Le nouveau format par défaut
         return {
-            "24": [{ id: Date.now(), time: "", nom: "", nota: "" }],
-            "25": [{ id: Date.now() + 1, time: "", nom: "", nota: "" }],
-            "26": [{ id: Date.now() + 2, time: "", nom: "", nota: "" }]
+            "24": [{ id: Date.now(), quand: "", type: "Activité", quoi: "" }],
+            "25": [{ id: Date.now() + 1, quand: "", type: "Activité", quoi: "" }],
+            "26": [{ id: Date.now() + 2, quand: "", type: "Activité", quoi: "" }]
         };
     });
 
@@ -25,43 +35,28 @@ export default function ProjectXScreen() {
     // MOTEUR DU CARROUSEL 3D
     // ==========================================
     const daysList = ["24", "25", "26"];
-    const [frontIndex, setFrontIndex] = useState(0); // Qui est au premier plan ? (0, 1 ou 2)
-    const [touchStartY, setTouchStartY] = useState(null); // Pour le swipe
+    const [frontIndex, setFrontIndex] = useState(0);
+    const [touchStartY, setTouchStartY] = useState(null);
 
-    // Calcule la position (0=devant, 1=milieu, 2=fond) pour chaque carte
-    const getPosClass = (index) => {
-        const pos = (index - frontIndex + 3) % 3;
-        return `pos-${pos}`;
-    };
+    const getPosClass = (index) => `pos-${(index - frontIndex + 3) % 3}`;
 
-    // Gestion des clics sur les cartes
     const handleCardClick = (index, dayStr) => {
         const pos = (index - frontIndex + 3) % 3;
-        if (pos === 0) {
-            setActiveDay(dayStr); // Si elle est devant, on l'ouvre
-        } else {
-            setFrontIndex(index); // Sinon, on la fait passer devant
-        }
+        if (pos === 0) setActiveDay(dayStr);
+        else setFrontIndex(index);
     };
 
-    // Détection du glissement (Swipe Up / Swipe Down)
-    const handleTouchStart = (e) => setTouchStartY(e.touches[0].clientY);
-    const handleTouchEnd = (e) => {
+    const handleDragStart = (clientY) => setTouchStartY(clientY);
+    const handleDragEnd = (clientY) => {
         if (!touchStartY) return;
-        const diff = touchStartY - e.changedTouches[0].clientY;
-
-        if (diff > 40) {
-            // Glissé vers le haut -> Carte suivante
-            setFrontIndex((prev) => (prev + 1) % 3);
-        } else if (diff < -40) {
-            // Glissé vers le bas -> Carte précédente
-            setFrontIndex((prev) => (prev - 1 + 3) % 3);
-        }
+        const diff = touchStartY - clientY;
+        if (diff > 30) setFrontIndex((prev) => (prev + 1) % 3);
+        else if (diff < -30) setFrontIndex((prev) => (prev - 1 + 3) % 3);
         setTouchStartY(null);
     };
 
     // ==========================================
-    // SAUVEGARDES ET TABLEAU
+    // SAUVEGARDES ET MISES À JOUR
     // ==========================================
     useEffect(() => {
         localStorage.setItem('projectX_current', JSON.stringify(data));
@@ -72,7 +67,7 @@ export default function ProjectXScreen() {
     };
 
     const addRow = (day) => {
-        setData(prev => ({ ...prev, [day]: [...prev[day], { id: Date.now(), time: "", nom: "", nota: "" }] }));
+        setData(prev => ({ ...prev, [day]: [...prev[day], { id: Date.now(), quand: "", type: "Activité", quoi: "" }] }));
     };
 
     const handleSaveBackup = () => {
@@ -95,7 +90,9 @@ export default function ProjectXScreen() {
         }
     };
 
-    // VUE 1 : LE TABLEAU ZOOMÉ
+    // ==========================================
+    // VUE 1 : LE TABLEAU ZOOMÉ (QUAND / QUOI)
+    // ==========================================
     if (activeDay) {
         return (
             <div className="vue active px-zoomed-container" style={{ padding: '20px' }}>
@@ -111,22 +108,57 @@ export default function ProjectXScreen() {
                         <table className="px-table">
                             <thead>
                             <tr>
-                                <th style={{ width: '25%' }}>Heure</th>
-                                <th style={{ width: '40%' }}>Lieu / Nom</th>
-                                <th style={{ width: '35%' }}>Notes</th>
+                                <th style={{ width: '30%', textAlign: 'center' }}>QUAND</th>
+                                <th style={{ width: '70%', paddingLeft: '15px' }}>QUOI</th>
                             </tr>
                             </thead>
                             <tbody>
                             {data[activeDay].map((row) => (
                                 <tr key={row.id}>
-                                    <td><input className="px-input" placeholder="00:00" value={row.time} onChange={(e) => updateRow(activeDay, row.id, 'time', e.target.value)} /></td>
-                                    <td><input className="px-input" placeholder="Lieu..." value={row.nom} onChange={(e) => updateRow(activeDay, row.id, 'nom', e.target.value)} /></td>
-                                    <td><input className="px-input" placeholder="Infos..." value={row.nota} onChange={(e) => updateRow(activeDay, row.id, 'nota', e.target.value)} /></td>
+
+                                    {/* COLONNE QUAND (Sélecteur d'heure) */}
+                                    <td style={{ borderRight: '1px solid rgba(255,255,255,0.1)' }}>
+                                        <input
+                                            type="time"
+                                            className="px-input"
+                                            value={row.quand}
+                                            onChange={(e) => updateRow(activeDay, row.id, 'quand', e.target.value)}
+                                        />
+                                    </td>
+
+                                    {/* COLONNE QUOI (Type + Texte) */}
+                                    <td>
+                                        <div style={{ display: 'flex', gap: '8px', padding: '6px 8px' }}>
+                                            {/* Le menu déroulant pour le type */}
+                                            <select
+                                                className="px-select"
+                                                value={row.type}
+                                                onChange={(e) => updateRow(activeDay, row.id, 'type', e.target.value)}
+                                            >
+                                                <option value="Activité">🎯 Activité</option>
+                                                <option value="Pêche">🐟 Pêche</option>
+                                                <option value="Restaurant">🍔 Resto</option>
+                                                <option value="Trajet">🚗 Trajet</option>
+                                            </select>
+
+                                            {/* Le champ texte pour les détails */}
+                                            <input
+                                                type="text"
+                                                className="px-input"
+                                                style={{ flex: 1, padding: '8px' }}
+                                                placeholder="Détails, lieu..."
+                                                value={row.quoi}
+                                                onChange={(e) => updateRow(activeDay, row.id, 'quoi', e.target.value)}
+                                            />
+                                        </div>
+                                    </td>
+
                                 </tr>
                             ))}
                             </tbody>
                         </table>
                     </div>
+
                     <button className="px-btn-add" onClick={() => addRow(activeDay)}>
                         <Plus size={20} /> Ajouter une ligne
                     </button>
@@ -135,7 +167,9 @@ export default function ProjectXScreen() {
         );
     }
 
-    // VUE 2 : L'ACCUEIL AVEC LA PILE DE CARTES CARROUSEL
+    // ==========================================
+    // VUE 2 : LA PILE DE CARTES CARROUSEL
+    // ==========================================
     return (
         <div className="vue active" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <div className="app-header">
@@ -144,30 +178,32 @@ export default function ProjectXScreen() {
 
             <div className="app-content" style={{ display: 'flex', flexDirection: 'column' }}>
                 <p style={{ textAlign: 'center', opacity: 0.7, fontSize: '14px', marginBottom: 0 }}>
-                    Sélectionne ou glisse une journée.
+                    Clique ou glisse une journée.
                 </p>
 
-                {/* LA PILE 3D (AVEC GESTION DU SWIPE) */}
-                <div className="px-stack-container" onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}>
+                <div
+                    className="px-stack-container"
+                    onTouchStart={(e) => handleDragStart(e.touches[0].clientY)}
+                    onTouchEnd={(e) => handleDragEnd(e.changedTouches[0].clientY)}
+                    onMouseDown={(e) => handleDragStart(e.clientY)}
+                    onMouseUp={(e) => handleDragEnd(e.clientY)}
+                    onMouseLeave={(e) => { if (touchStartY) handleDragEnd(e.clientY); }}
+                >
                     {daysList.map((dayStr, index) => (
-                        <div
-                            key={dayStr}
-                            className={`px-card ${getPosClass(index)}`}
-                            onClick={() => handleCardClick(index, dayStr)}
-                        >
+                        <div key={dayStr} className={`px-card ${getPosClass(index)}`} onClick={() => handleCardClick(index, dayStr)}>
                             <div style={{ background: '#e6c280', padding: '12px', borderRadius: '12px', display: 'flex' }}>
                                 <Calendar size={24} color="#000" />
                             </div>
                             <div>
                                 <h3 style={{ margin: 0 }}>Journée du {dayStr}</h3>
-                                <p style={{ margin: 0, opacity: 0.6, fontSize: '12px' }}>{data[dayStr].length} activité(s)</p>
+                                <p style={{ margin: 0, opacity: 0.6, fontSize: '12px' }}>{data[dayStr].length} étape(s) prévue(s)</p>
                             </div>
                         </div>
                     ))}
                 </div>
 
                 <p style={{ textAlign: 'center', opacity: 0.4, fontSize: '11px', marginTop: '10px' }}>
-                    👆 Glisse vers le haut ou le bas
+                    ↕️ Glisse haut/bas pour faire tourner
                 </p>
 
                 <div className="px-toolbar">
