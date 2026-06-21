@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 import AppIcon from './AppIcon';
 import { supabase } from '../supabaseClient';
-import { TreePine, ShoppingBag, Map, Fish, Utensils, User, Camera, Settings, Rocket, Sun, CloudSun, Cloud, CloudRain, CloudLightning, Snowflake, Moon, car } from 'lucide-react';
+import { TreePine, ShoppingBag, Map, Fish, Utensils, User, Camera, Settings, Rocket, Sun, CloudSun, Cloud, CloudRain, CloudLightning, Snowflake, Moon, Car } from 'lucide-react';
 
 // ==============================================================
 // 1. LE COMPOSANT WIDGET METEO (Maintenant Électrique !)
